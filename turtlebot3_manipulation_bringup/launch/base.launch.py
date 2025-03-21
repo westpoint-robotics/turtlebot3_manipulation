@@ -114,6 +114,14 @@ def generate_launch_description():
         ]
     )
 
+    # diff_driver_manager_config = PathJoinSubstitution(
+    #     [
+    #         FindPackageShare('turtlebot3_manipulation_bringup'),
+    #         'config',
+    #         'diff_driver_controller_manager.yaml',
+    #     ]
+    # )
+
     rviz_config_file = PathJoinSubstitution(
         [
             FindPackageShare('turtlebot3_manipulation_bringup'),
@@ -161,6 +169,7 @@ def generate_launch_description():
     diff_drive_controller_spawner = Node(
         package='controller_manager',
         executable='spawner',
+        # parameters=[diff_driver_manager_config,],
         arguments=['diff_drive_controller', '-c', '/controller_manager'],
         output='screen',
         condition=UnlessCondition(use_sim)

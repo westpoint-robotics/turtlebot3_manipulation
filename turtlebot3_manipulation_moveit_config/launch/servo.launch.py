@@ -33,7 +33,7 @@ def generate_launch_description():
     use_sim = LaunchConfiguration('use_sim')
     declare_use_sim = DeclareLaunchArgument(
         'use_sim',
-        default_value='true',
+        default_value='false',
         description='Start robot in Gazebo simulation.')
     ld.add_action(declare_use_sim)
 
@@ -87,7 +87,7 @@ def generate_launch_description():
     # Launch as much as possible in components
     servo_node = Node(
         package="moveit_servo",
-        executable="servo_node_main",
+        executable="servo_node",
         parameters=[
             {'use_gazebo':use_sim},
             servo_params,

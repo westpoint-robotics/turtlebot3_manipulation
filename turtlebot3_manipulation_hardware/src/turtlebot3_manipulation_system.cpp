@@ -279,6 +279,9 @@ hardware_interface::return_type TurtleBot3ManipulationSystemHardware::write(
   if (opencr_->set_wheel_velocities(dxl_wheel_commands_) == false) {
     RCLCPP_ERROR(logger, "Can't control wheels");
   }
+  // else {
+  //   RCLCPP_INFO(logger, "DML===> set_wheel_velocities %f, %f",dxl_wheel_commands_[0],dxl_wheel_commands_[1]);
+  // }
 
   if (opencr_->set_joint_positions(dxl_joint_commands_) == false) {
     RCLCPP_ERROR(logger, "Can't control joints");

@@ -4,9 +4,10 @@ from rclpy.node import Node
 from builtin_interfaces.msg import Duration
 
 from trajectory_msgs.msg import JointTrajectory, JointTrajectoryPoint
+from geometry_msgs.msg import TwistStamped
 from sensor_msgs.msg import JointState
 import traceback
-
+from rclpy.qos import QoSProfile, ReliabilityPolicy, HistoryPolicy, DurabilityPolicy
 
 class PublisherJointTrajectory(Node):
     def __init__(self):
@@ -25,11 +26,9 @@ class PublisherJointTrajectory(Node):
         self.joints = self.get_parameter("joints").value
         self.check_starting_point = self.get_parameter("check_starting_point").value
         self.starting_point = {}
-        # self.joints=['joint1','joint1','joint3','joint4']
 
         for joint in self.joints:
             self.get_logger().info(f'Joint Name is  "{joint}" ')
-
 
         if self.joints is None or len(self.joints) == 0:
             raise Exception('"joints" parameter is not set!')
@@ -124,8 +123,27 @@ class PublisherJointTrajectory(Node):
         )
 
         self.publisher_ = self.create_publisher(JointTrajectory, publish_topic, 1)
+        
+        self.cmd_vel = TwistStamped()
+        cmd_vel_qos = QoSProfile(
+            reliability=ReliabilityPolicy.BEST_EFFORT,
+            history=HistoryPolicy.KEEP_LAST,
+            depth=10,
+            durability=DurabilityPolicy.VOLATILE
+        )
+        self.cmd_vel_pub_ = self.create_publisher(TwistStamped, '/diff_drive_controller/cmd_vel', qos_profile=cmd_vel_qos)
+
         self.timer = self.create_timer(wait_sec_between_publish, self.timer_callback)
+        self.timer2 = self.create_timer(0.03, self.timer_cmd_vel_callback)
         self.i = 0
+
+    def timer_cmd_vel_callback(self):
+        # self.cmd_vel = '{header: "auto", twist: {linear: {x: 3.0, y: 0.0, z: 0.0}, angular: {x: 0.0, y: 0.0, z: 0.2}}}'
+        self.cmd_vel.header.stamp = self.get_clock().now().to_msg()
+        self.cmd_vel.header.frame_id = 'Turtlebot3'
+        self.cmd_vel.twist.linear.x = 1.0
+        self.cmd_vel.twist.angular.z = -3.1
+        self.cmd_vel_pub_.publish(self.cmd_vel)
 
     def timer_callback(self):
 
