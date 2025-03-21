@@ -1,8 +1,0 @@
-{
-    "cmake.sourceDirectory": "/home/user1/ros2_ws/src/turtlebot3_manipulation/turtlebot3_manipulation",
-    "files.associations": {
-        "*.tcc": "cpp",
-        "deque": "cpp",
-        "vector": "cpp"
-    }
-}
