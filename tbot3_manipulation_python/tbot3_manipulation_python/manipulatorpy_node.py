@@ -141,8 +141,8 @@ class PublisherJointTrajectory(Node):
         # self.cmd_vel = '{header: "auto", twist: {linear: {x: 3.0, y: 0.0, z: 0.0}, angular: {x: 0.0, y: 0.0, z: 0.2}}}'
         self.cmd_vel.header.stamp = self.get_clock().now().to_msg()
         self.cmd_vel.header.frame_id = 'Turtlebot3'
-        self.cmd_vel.twist.linear.x = 1.0
-        self.cmd_vel.twist.angular.z = -3.1
+        self.cmd_vel.twist.linear.x = 0.01
+        self.cmd_vel.twist.angular.z = 0.05
         self.cmd_vel_pub_.publish(self.cmd_vel)
 
     def timer_callback(self):
