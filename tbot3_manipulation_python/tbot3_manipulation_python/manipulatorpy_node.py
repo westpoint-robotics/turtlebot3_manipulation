@@ -134,15 +134,27 @@ class PublisherJointTrajectory(Node):
         self.cmd_vel_pub_ = self.create_publisher(TwistStamped, '/diff_drive_controller/cmd_vel', qos_profile=cmd_vel_qos)
 
         self.timer = self.create_timer(wait_sec_between_publish, self.timer_callback)
-        self.timer2 = self.create_timer(0.03, self.timer_cmd_vel_callback)
+        self.timer2 = self.create_timer(0.1, self.timer_cmd_vel_callback)
         self.i = 0
 
     def timer_cmd_vel_callback(self):
+        self.pub_vel()
+        pass
+
+    def pub_vel(self, lin=None, ang=None):
         self.cmd_vel.header.stamp = self.get_clock().now().to_msg()
         self.cmd_vel.header.frame_id = 'Turtlebot3'
-        self.cmd_vel.twist.linear.x = 0.7
-        self.cmd_vel.twist.angular.z = 1.0
+        if isinstance(lin, float):
+            self.cmd_vel.twist.linear.x = lin
+            if isinstance(ang, float):
+                self.cmd_vel.twist.angular.z = ang
+            else:
+                self.cmd_vel.twist.angular.z = 0.0
+        else:
+            self.cmd_vel.twist.linear.x = 0.7
+            self.cmd_vel.twist.angular.z = 1.0
         self.cmd_vel_pub_.publish(self.cmd_vel)
+
 
     def timer_callback(self):
 
@@ -193,17 +205,20 @@ class PublisherJointTrajectory(Node):
 
 def main(args=None):
     rclpy.init(args=args)
-
     publisher_joint_trajectory = PublisherJointTrajectory()
+    publisher_joint_trajectory.pub_vel(0.0,0.0)
 
     try:
         rclpy.spin(publisher_joint_trajectory)
     except (KeyboardInterrupt, rclpy.executors.ExternalShutdownException):
         print("Keyboard interrupt received. Shutting down node.")
+        # Send stop command to diff drive
+        publisher_joint_trajectory.pub_vel(0.0,0.0)
 
     except Exception as e:
         print(f"Unhandled exception: {traceback.format_exc()}")
 
+    # Send stop command to diff drive
     rclpy.shutdown()
 
 if __name__ == "__main__":

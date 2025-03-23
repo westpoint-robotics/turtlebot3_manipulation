@@ -1,3 +1,21 @@
+# West Point Documentation in this section:
+
+## What works in Simulation
+- Start the simulation:  
+`ros2 launch turtlebot3_manipulation_bringup gazebo.launch.py`
+
+- Run example control code:  
+`roslaunch tbot3_manipulation_python test_joint_control.launch.py`
+
+## What works on Real Hardware
+- On the Raspberry Pi5 bring up the Turtlebot:  
+`ros2 launch turtlebot3_manipulation_bringup hardware.launch.py`
+
+- Run example control code:  
+`roslaunch tbot3_manipulation_python test_joint_control.launch.py`
+
+
+
 # OpenManipulator with TurtleBot3
 <img src="https://github.com/ROBOTIS-GIT/emanual/blob/master/assets/images/platform/turtlebot3/manipulation/tb3_with_opm_logo.png">
 <img src="https://github.com/ROBOTIS-GIT/emanual/blob/master/assets/images/platform/turtlebot3/manipulation/hardware_setup.png">

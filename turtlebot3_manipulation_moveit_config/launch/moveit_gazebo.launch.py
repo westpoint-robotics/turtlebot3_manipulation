@@ -57,7 +57,7 @@ def generate_launch_description():
         'start_rviz',
         default_value='false',
         description='Whether execute rviz2')
-    ld.add_action(rviz_arg)
+    # ld.add_action(rviz_arg)
 
     empty_world_path = PathJoinSubstitution(
         [
