@@ -48,6 +48,7 @@ def generate_launch_description():
 
     # Add the package resources to GZ environmental variables
     bringup_world_dir = os.path.join(get_package_share_directory('turtlebot3_manipulation_bringup'), 'worlds')
+    bringup_model_dir = os.path.join(get_package_share_directory('turtlebot3_manipulation_bringup'), 'models')
     desc_mesh_dir = get_package_share_directory('turtlebot3_manipulation_description').rsplit('/',1)[0]
     desc_urdf_dir = os.path.join(get_package_share_directory('turtlebot3_manipulation_description'), 'urdf')
     # print(f'\n\t bringup_world_dir: {bringup_world_dir}\n\t desc_mesh_dir: {desc_mesh_dir}\n\t desc_urdf_dir: {desc_urdf_dir}\n')
@@ -89,12 +90,13 @@ def generate_launch_description():
 
     return LaunchDescription([
         AppendEnvironmentVariable('GZ_SIM_RESOURCE_PATH', bringup_world_dir),
+        AppendEnvironmentVariable('GZ_SIM_RESOURCE_PATH', bringup_model_dir),
         AppendEnvironmentVariable('GZ_SIM_RESOURCE_PATH',desc_mesh_dir),
         AppendEnvironmentVariable('GZ_SIM_RESOURCE_PATH',desc_urdf_dir),
 
         DeclareLaunchArgument(
             'start_rviz',
-            default_value='false',
+            default_value='true',
             description='Whether execute rviz2'),
 
         DeclareLaunchArgument(
