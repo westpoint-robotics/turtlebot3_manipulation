@@ -201,14 +201,14 @@ def generate_launch_description():
         output='screen',
     )
 
-    twist_mux_node= Node(
-            package='twist_mux',
-            executable='twist_mux',
-            output='screen',
-            remappings={('/cmd_vel_out', 'diff_drive_controller/cmd_vel')},
-            parameters=[
-                {'use_sim_time': LaunchConfiguration('use_sim_time')},
-                LaunchConfiguration('twist_mux_config')])
+    # twist_mux_node= Node(
+    #         package='twist_mux',
+    #         executable='twist_mux',
+    #         output='screen',
+    #         remappings={('/cmd_vel_out', '/cmd_vel_nav')},
+    #         parameters=[
+    #             {'use_sim_time': LaunchConfiguration('use_sim_time')},
+    #             LaunchConfiguration('twist_mux_config')])
 
     delay_rviz_after_joint_state_broadcaster_spawner = RegisterEventHandler(
         event_handler=OnProcessExit(
@@ -252,7 +252,7 @@ def generate_launch_description():
     nodes = [
         control_node,
         robot_state_pub_node,
-        twist_mux_node,
+        # twist_mux_node,
         joint_state_broadcaster_spawner,
         delay_rviz_after_joint_state_broadcaster_spawner,
         delay_diff_drive_controller_spawner_after_joint_state_broadcaster_spawner,

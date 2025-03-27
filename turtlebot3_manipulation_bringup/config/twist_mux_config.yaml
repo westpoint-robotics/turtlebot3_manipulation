@@ -10,10 +10,15 @@ twist_mux:
     use_stamped: true
     topics:
       navigation:
-        topic   : cmd_vel_nav
+        topic   : cmd_vel
         timeout : 0.5
         priority: 10
+      behavior_tree:
+        topic   : cmd_vel_dock
+        timeout : 0.5
+        priority: 50
       joystick:
         topic   : cmd_vel_joy
         timeout : 0.5
         priority: 100
+
