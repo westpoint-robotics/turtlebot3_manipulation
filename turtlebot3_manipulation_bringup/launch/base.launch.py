@@ -16,6 +16,7 @@
 #
 # Author: Darby Lim, Hye-jong KIM
 
+# import os
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
 from launch.actions import RegisterEventHandler
@@ -29,9 +30,17 @@ from launch.substitutions import PathJoinSubstitution
 
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
+# from ament_index_python.packages import get_package_share_directory
 
 
 def generate_launch_description():
+    twist_mux_config = PathJoinSubstitution(
+                [ FindPackageShare('turtlebot3_manipulation_bringup'),
+                                    'config',
+                                    'twist_mux_config.yaml'])
+    # os.path.join(get_package_share_directory('twist_mux'),
+    #                                      'config', 'twist_mux_topics.yaml')
+
     declared_arguments = []
     declared_arguments.append(
         DeclareLaunchArgument(
@@ -72,6 +81,13 @@ def generate_launch_description():
             description='Enable fake command interfaces for sensors used for simple simulations. \
             Used only if "use_fake_hardware" parameter is true.'
         )
+    )
+
+    declared_arguments.append(
+        DeclareLaunchArgument(
+            'twist_mux_config',
+            default_value=twist_mux_config,
+            description='Default topics config file'),
     )
 
     start_rviz = LaunchConfiguration('start_rviz')
@@ -161,10 +177,8 @@ def generate_launch_description():
     diff_drive_controller_spawner = Node(
         package='controller_manager',
         executable='spawner',
-        arguments=['diff_drive_controller', '-c', '/controller_manager'],
-        output='screen',
-        # condition=UnlessCondition(use_sim)
-    )
+        arguments=['diff_drive_controller', '-c', '/controller_manager',],
+        output='screen',)
 
     imu_broadcaster_spawner = Node(
         package='controller_manager',
@@ -186,6 +200,15 @@ def generate_launch_description():
         arguments=['gripper_controller'],
         output='screen',
     )
+
+    twist_mux_node= Node(
+            package='twist_mux',
+            executable='twist_mux',
+            output='screen',
+            remappings={('/cmd_vel_out', 'diff_drive_controller/cmd_vel')},
+            parameters=[
+                {'use_sim_time': LaunchConfiguration('use_sim_time')},
+                LaunchConfiguration('twist_mux_config')])
 
     delay_rviz_after_joint_state_broadcaster_spawner = RegisterEventHandler(
         event_handler=OnProcessExit(
@@ -229,6 +252,7 @@ def generate_launch_description():
     nodes = [
         control_node,
         robot_state_pub_node,
+        twist_mux_node,
         joint_state_broadcaster_spawner,
         delay_rviz_after_joint_state_broadcaster_spawner,
         delay_diff_drive_controller_spawner_after_joint_state_broadcaster_spawner,

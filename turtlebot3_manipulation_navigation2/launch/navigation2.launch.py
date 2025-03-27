@@ -31,6 +31,7 @@ from launch_ros.substitutions import FindPackageShare
 def generate_launch_description():
     start_rviz = LaunchConfiguration('start_rviz')
     use_sim = LaunchConfiguration('use_sim')
+    use_slam = LaunchConfiguration('use_slam', default='False')
     map_yaml_file = LaunchConfiguration('map_yaml_file')
     params_file = LaunchConfiguration('params_file')
     default_bt_xml_filename = LaunchConfiguration('default_bt_xml_filename')
@@ -44,7 +45,7 @@ def generate_launch_description():
             [
                 FindPackageShare('turtlebot3_manipulation_navigation2'),
                 'map',
-                'turtlebot3_world.yaml'
+                'small_building.yaml'
             ]
         )
     )
@@ -125,11 +126,17 @@ def generate_launch_description():
             description='Whether to respawn if a node crashes. \
                 Applied when composition is disabled.'),
 
+        DeclareLaunchArgument(
+            'use_slam',
+            default_value='true',
+            description='Use SLAM'), 
+
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource([nav2_launch_file_dir, '/bringup_launch.py']),
             launch_arguments={
                 'map': map_yaml_file,
                 'use_sim_time': use_sim,
+                'slam': use_slam,
                 'params_file': params_file,
                 'default_bt_xml_filename': default_bt_xml_filename,
                 'autostart': autostart,

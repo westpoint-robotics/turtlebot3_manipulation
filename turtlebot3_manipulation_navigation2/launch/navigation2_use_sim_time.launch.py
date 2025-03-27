@@ -37,6 +37,7 @@ def generate_launch_description():
     autostart = LaunchConfiguration('autostart')
     use_composition = LaunchConfiguration('use_composition')
     use_respawn = LaunchConfiguration('use_respawn')
+    use_slam = LaunchConfiguration('use_slam')
 
     map_yaml_file = LaunchConfiguration(
         'map_yaml_file',
@@ -44,7 +45,7 @@ def generate_launch_description():
             [
                 FindPackageShare('turtlebot3_manipulation_navigation2'),
                 'map',
-                'turtlebot3_world.yaml'
+                'small_building.yaml'
             ]
         )
     )
@@ -55,7 +56,8 @@ def generate_launch_description():
             [
                 FindPackageShare('turtlebot3_manipulation_navigation2'),
                 'param',
-                'turtlebot3_use_sim_time.yaml'
+                'wp_nav2_params_sim.yaml'
+                # 'turtlebot3_use_sim_time.yaml'
             ]
         )
     )
@@ -116,7 +118,7 @@ def generate_launch_description():
 
         DeclareLaunchArgument(
             'use_composition',
-            default_value='True',
+            default_value='False',
             description='Whether to use composed bringup'),
 
         DeclareLaunchArgument(
@@ -124,6 +126,17 @@ def generate_launch_description():
             default_value='false',
             description='Whether to respawn if a node crashes. \
                 Applied when composition is disabled.'),
+
+        DeclareLaunchArgument(
+            'use_slam', default_value='False', description='Whether run a SLAM'),
+
+        # Node(
+        #     package='rviz2',
+        #     executable='rviz2',
+        #     name='rviz2',
+        #     arguments=['-d', rviz_config_file, '--log-level', 'warn' ],
+        #     output='screen',
+        #     condition=IfCondition(start_rviz)),
 
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource([nav2_launch_file_dir, '/bringup_launch.py']),
@@ -135,6 +148,8 @@ def generate_launch_description():
                 'autostart': autostart,
                 'use_composition': use_composition,
                 'use_respawn': use_respawn,
+                'slam': use_slam,
+                'log_level': 'warn',
             }.items(),
         ),
 
@@ -142,7 +157,7 @@ def generate_launch_description():
             package='rviz2',
             executable='rviz2',
             name='rviz2',
-            arguments=['-d', rviz_config_file],
+            arguments=['-d', rviz_config_file,  ],
             output='screen',
             condition=IfCondition(start_rviz)),
     ])

@@ -131,7 +131,7 @@ class PublisherJointTrajectory(Node):
             depth=10,
             durability=DurabilityPolicy.VOLATILE
         )
-        self.cmd_vel_pub_ = self.create_publisher(TwistStamped, '/diff_drive_controller/cmd_vel', qos_profile=cmd_vel_qos)
+        self.cmd_vel_pub_ = self.create_publisher(TwistStamped, 'cmd_vel', qos_profile=cmd_vel_qos)
 
         self.timer = self.create_timer(wait_sec_between_publish, self.timer_callback)
         self.timer2 = self.create_timer(0.1, self.timer_cmd_vel_callback)
@@ -201,7 +201,6 @@ class PublisherJointTrajectory(Node):
             self.joint_state_msg_received = True
         else:
             return
-
 
 def main(args=None):
     rclpy.init(args=args)

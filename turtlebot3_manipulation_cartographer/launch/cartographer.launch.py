@@ -31,7 +31,7 @@ from launch_ros.substitutions import FindPackageShare
 
 def generate_launch_description():
     start_rviz = LaunchConfiguration('start_rviz')
-    use_sim = LaunchConfiguration('use_sim')
+    use_sim_time = LaunchConfiguration('use_sim_time')
 
     cartographer_config_dir = PathJoinSubstitution(
         [
@@ -58,7 +58,7 @@ def generate_launch_description():
             description='Whether execute rviz2'),
 
         DeclareLaunchArgument(
-            'use_sim',
+            'use_sim_time',
             default_value='false',
             description='Start robot in Gazebo simulation'),
 
@@ -81,7 +81,7 @@ def generate_launch_description():
             package='cartographer_ros',
             executable='cartographer_node',
             output='screen',
-            parameters=[{'use_sim_time': use_sim}],
+            parameters=[{'use_sim_time': use_sim_time}],
             arguments=['-configuration_directory', cartographer_config_dir,
                        '-configuration_basename', configuration_basename]),
 
@@ -89,7 +89,7 @@ def generate_launch_description():
             package='cartographer_ros',
             executable='cartographer_occupancy_grid_node',
             output='screen',
-            parameters=[{'use_sim_time': use_sim}],
+            parameters=[{'use_sim_time': use_sim_time}],
             arguments=['-resolution', resolution]),
 
         Node(

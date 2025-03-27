@@ -42,6 +42,7 @@
   ros_type_name: "sensor_msgs/msg/LaserScan"
   gz_type_name: "gz.msgs.LaserScan"
   direction: GZ_TO_ROS
+  reliability: "best_effort"
 
 # replace cmd_vel_bridge
 - ros_topic_name: "diff_drive_controller/cmd_vel"

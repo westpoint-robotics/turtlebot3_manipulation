@@ -30,6 +30,8 @@ from launch.substitutions import ThisLaunchFileDir
 
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
+from launch.conditions import IfCondition
+
 
 
 def is_valid_to_launch():
@@ -61,14 +63,18 @@ def generate_launch_description():
 
     namespace = LaunchConfiguration('namespace')
     robot_name = LaunchConfiguration('robot_name')
+    use_joy = LaunchConfiguration('use_joy')
+    joy_configs = PathJoinSubstitution([
+            FindPackageShare('turtlebot3_manipulation_bringup'),
+            'config',
+            'xbox.config.yaml',
+        ])
 
-    ros_gz_bridge_config = PathJoinSubstitution(
-        [
+    ros_gz_bridge_config = PathJoinSubstitution([
             FindPackageShare('turtlebot3_manipulation_bringup'),
             'config',
             'tb3_bridge.yaml',
-        ]
-    )
+        ])
 
     world = LaunchConfiguration(
         'world',
@@ -96,7 +102,7 @@ def generate_launch_description():
 
         DeclareLaunchArgument(
             'start_rviz',
-            default_value='true',
+            default_value='false',
             description='Whether execute rviz2'),
 
         DeclareLaunchArgument(
@@ -152,7 +158,12 @@ def generate_launch_description():
         DeclareLaunchArgument(
             'robot_name',
             default_value='turtlebot3',
-            description='name of the robot'),            
+            description='name of the robot'),
+            
+        DeclareLaunchArgument(
+            'use_joy',
+            default_value='True',
+            description='Whether to start joystick control nodes'),
 
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource([ThisLaunchFileDir(), '/base.launch.py']),
@@ -179,6 +190,18 @@ def generate_launch_description():
             ),
             launch_arguments={'gz_args': ['-g ']}.items(),
         ),
+
+        IncludeLaunchDescription(
+            PythonLaunchDescriptionSource(
+                os.path.join(get_package_share_directory('teleop_twist_joy'),
+                         'launch',
+                         'teleop-launch.py')
+            ),
+            condition=IfCondition(use_joy),
+            launch_arguments={'config_filepath': joy_configs,
+                          'joy_dev': '0',
+                          'joy_vel': 'cmd_vel_joy',
+                          'publish_stamped_twist': 'true',}.items()),        
 
         Node(
             package='ros_gz_bridge',

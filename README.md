@@ -1,17 +1,17 @@
 # West Point Documentation in this section:
 
-## What works in Simulation
+## What has been tested in Simulation
 - Start the simulation:  
 `ros2 launch turtlebot3_manipulation_bringup gazebo.launch.py`
 
-- Run example control code:  
+- Run example control code (Drives in circle and moves manipulator repeatedly between 4 poses):  
 `roslaunch tbot3_manipulation_python test_joint_control.launch.py`
 
-## What works on Real Hardware
+## What has been tested on Real Hardware
 - On the Raspberry Pi5 bring up the Turtlebot:  
 `ros2 launch turtlebot3_manipulation_bringup hardware.launch.py`
 
-- Run example control code:  
+- Run example control code (Drives in circle and moves manipulator repeatedly between 4 poses):  
 `roslaunch tbot3_manipulation_python test_joint_control.launch.py`
 
 
