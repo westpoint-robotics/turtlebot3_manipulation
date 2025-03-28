@@ -3,6 +3,9 @@ import rclpy
 from rclpy.node import Node
 from builtin_interfaces.msg import Duration
 
+from rclpy.action import ActionClient
+from control_msgs.action import GripperCommand
+
 from trajectory_msgs.msg import JointTrajectory, JointTrajectoryPoint
 from geometry_msgs.msg import TwistStamped
 from sensor_msgs.msg import JointState
@@ -124,6 +127,14 @@ class PublisherJointTrajectory(Node):
 
         self.publisher_ = self.create_publisher(JointTrajectory, publish_topic, 1)
         
+        # ADDED FOR GRIPPER
+        # Create an ActionClient to communicate with the GripperActionController
+        self.gripper_client = ActionClient(
+            self,
+            GripperCommand,
+            '/gripper_controller/gripper_cmd'
+        )
+        
         self.cmd_vel = TwistStamped()
         cmd_vel_qos = QoSProfile(
             reliability=ReliabilityPolicy.RELIABLE,
@@ -131,7 +142,7 @@ class PublisherJointTrajectory(Node):
             depth=10,
             durability=DurabilityPolicy.VOLATILE
         )
-        self.cmd_vel_pub_ = self.create_publisher(TwistStamped, 'cmd_vel', qos_profile=cmd_vel_qos)
+        self.cmd_vel_pub_ = self.create_publisher(TwistStamped, '/diff_drive_controller/cmd_vel', qos_profile=cmd_vel_qos)
 
         self.timer = self.create_timer(wait_sec_between_publish, self.timer_callback)
         self.timer2 = self.create_timer(0.1, self.timer_cmd_vel_callback)
@@ -201,14 +212,46 @@ class PublisherJointTrajectory(Node):
             self.joint_state_msg_received = True
         else:
             return
+            
+    def send_gripper_goal(self, position, max_effort=0.0):
+        goal_msg = GripperCommand.Goal()
+        goal_msg.command.position = position
+        goal_msg.command.max_effort = max_effort
+
+        self.gripper_client.wait_for_server()
+        self._send_goal_future = self.gripper_client.send_goal_async(goal_msg)
+        self._send_goal_future.add_done_callback(self.goal_response_callback)
+        self.get_logger().info(f"Sending gripper command: position={position}, max_effort={max_effort}")
+
+    def goal_response_callback(self, future):
+        goal_handle = future.result()
+        if not goal_handle.accepted:
+            self.get_logger().info('Gripper goal rejected.')
+            return
+
+        self.get_logger().info('Gripper goal accepted.')
+        self._result_future = goal_handle.get_result_async()
+        self._result_future.add_done_callback(self.get_result_callback)
+
+    def get_result_callback(self, future):
+        result = future.result().result
+        self.get_logger().info(
+            f"Gripper result: position={result.position:.4f}, "
+            f"effort={result.effort}, "
+            f"stalled={result.stalled}, "
+            f"reached_goal={result.reached_goal}"
+        )
 
 def main(args=None):
     rclpy.init(args=args)
-    publisher_joint_trajectory = PublisherJointTrajectory()
-    publisher_joint_trajectory.pub_vel(0.0,0.0)
+    node = PublisherJointTrajectory()
+    node.pub_vel(0.0,0.0)
+
+    # For example, open the gripper right away:
+    node.send_gripper_goal(position=0.03)
 
     try:
-        rclpy.spin(publisher_joint_trajectory)
+        rclpy.spin(node)
     except (KeyboardInterrupt, rclpy.executors.ExternalShutdownException):
         print("Keyboard interrupt received. Shutting down node.")
         # Send stop command to diff drive

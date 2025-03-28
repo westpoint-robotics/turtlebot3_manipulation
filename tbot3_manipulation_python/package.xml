@@ -4,8 +4,10 @@
   <name>tbot3_manipulation_python</name>
   <version>0.0.0</version>
   <description>TODO: Package description</description>
-  <maintainer email="dominic.larkin@westpoint.edu">user1</maintainer>
+  <maintainer email="emmanuel.adeniran@westpoint.edu">tbot01</maintainer>
   <license>Apache-2.0</license>
+  <exec_depend>rclpy</exec_depend>
+  <exec_depend>control_msgs</exec_depend>
 
   <exec_depend>ros2launch</exec_depend>
 
