@@ -4,20 +4,26 @@
 - Start the simulation:  
 `ros2 launch turtlebot3_manipulation_bringup gazebo.launch.py`
 
-- Run example control code (Drives in circle and moves manipulator repeatedly between 4 poses):  
-`roslaunch tbot3_manipulation_python test_joint_control.launch.py`
+- Options to run in simulation:
+  1. Run example control code (Drives in circle and moves manipulator repeatedly between 4 poses):  
+  `ros2 launch tbot3_manipulation_python test_joint_control.launch.py`
 
-- Instead of the example control code run NAV2 with a known map  
-`ros2 launch turtlebot3_manipulation_navigation2 navigation2_use_sim_time.launch.py`
-  - After RVIZ opens, you need to set the initial pose using the "2d Pose Estimate" button
-  - Then drop a goal to navigat toward with the "Nav2 Goal" button
+  2. Run NAV2 with a known map  
+  `ros2 launch turtlebot3_manipulation_navigation2 navigation2_use_sim_time.launch.py slam:='False'`
+      - After RVIZ opens, you need to set the initial pose using the "2d Pose Estimate" button
+      - Then drop a goal to navigate toward with the "Nav2 Goal" button  
+
+  3. Run NAV2 with SLAM (No known map)  
+  `ros2 launch turtlebot3_manipulation_navigation2 navigation2_use_sim_time.launch.py use_slam:='True'`
+      - After RVIZ opens, wait about 1 minute for initial map to be generated
+      - Then drop a goal to navigate toward with the "Nav2 Goal" button
 
 ## What has been tested on Real Hardware
 - On the Raspberry Pi5 bring up the Turtlebot:  
 `ros2 launch turtlebot3_manipulation_bringup hardware.launch.py`
 
 - Run example control code (Drives in circle and moves manipulator repeatedly between 4 poses):  
-`roslaunch tbot3_manipulation_python test_joint_control.launch.py`
+`ros2 launch tbot3_manipulation_python test_joint_control.launch.py`
 
 
 

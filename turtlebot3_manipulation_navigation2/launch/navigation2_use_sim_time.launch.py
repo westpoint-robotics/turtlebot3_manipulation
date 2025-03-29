@@ -37,7 +37,7 @@ def generate_launch_description():
     autostart = LaunchConfiguration('autostart')
     use_composition = LaunchConfiguration('use_composition')
     use_respawn = LaunchConfiguration('use_respawn')
-    use_slam = LaunchConfiguration('use_slam')
+    slam = LaunchConfiguration('slam')
 
     map_yaml_file = LaunchConfiguration(
         'map_yaml_file',
@@ -118,7 +118,7 @@ def generate_launch_description():
 
         DeclareLaunchArgument(
             'use_composition',
-            default_value='False',
+            default_value='True',
             description='Whether to use composed bringup'),
 
         DeclareLaunchArgument(
@@ -128,15 +128,7 @@ def generate_launch_description():
                 Applied when composition is disabled.'),
 
         DeclareLaunchArgument(
-            'use_slam', default_value='False', description='Whether run a SLAM'),
-
-        # Node(
-        #     package='rviz2',
-        #     executable='rviz2',
-        #     name='rviz2',
-        #     arguments=['-d', rviz_config_file, '--log-level', 'warn' ],
-        #     output='screen',
-        #     condition=IfCondition(start_rviz)),
+            'slam', default_value='True', description='Whether run a SLAM'),
 
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource([nav2_launch_file_dir, '/bringup_launch.py']),
@@ -148,7 +140,7 @@ def generate_launch_description():
                 'autostart': autostart,
                 'use_composition': use_composition,
                 'use_respawn': use_respawn,
-                'slam': use_slam,
+                'slam': slam,
                 'log_level': 'warn',
             }.items(),
         ),

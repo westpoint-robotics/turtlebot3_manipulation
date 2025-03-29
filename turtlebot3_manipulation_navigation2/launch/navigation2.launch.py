@@ -31,7 +31,7 @@ from launch_ros.substitutions import FindPackageShare
 def generate_launch_description():
     start_rviz = LaunchConfiguration('start_rviz')
     use_sim = LaunchConfiguration('use_sim')
-    use_slam = LaunchConfiguration('use_slam', default='False')
+    slam = LaunchConfiguration('slam')
     map_yaml_file = LaunchConfiguration('map_yaml_file')
     params_file = LaunchConfiguration('params_file')
     default_bt_xml_filename = LaunchConfiguration('default_bt_xml_filename')
@@ -127,7 +127,7 @@ def generate_launch_description():
                 Applied when composition is disabled.'),
 
         DeclareLaunchArgument(
-            'use_slam',
+            'slam',
             default_value='true',
             description='Use SLAM'), 
 
@@ -136,7 +136,7 @@ def generate_launch_description():
             launch_arguments={
                 'map': map_yaml_file,
                 'use_sim_time': use_sim,
-                'slam': use_slam,
+                'slam': slam,
                 'params_file': params_file,
                 'default_bt_xml_filename': default_bt_xml_filename,
                 'autostart': autostart,
