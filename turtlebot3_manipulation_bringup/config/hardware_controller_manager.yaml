@@ -1,5 +1,6 @@
 controller_manager:
   ros__parameters:
+    log_level: "WARN"
     update_rate: 100  # Hz
 
     joint_state_broadcaster:

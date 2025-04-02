@@ -1,3 +1,5 @@
+# MoveIt uses this configuration for controller management
+
 controller_names:
   - arm_controller
   - gripper_controller
@@ -11,9 +13,11 @@ arm_controller:
     - joint2
     - joint3
     - joint4
+
 gripper_controller:
   type: GripperCommand
   action_ns: gripper_cmd
   default: true
   joints:
     - gripper_left_joint
+  interface_name: position

@@ -16,15 +16,6 @@
 #
 # Authors: Hye-jong KIM
 
-# setup assistant (humble)
-# from moveit_configs_utils import MoveItConfigsBuilder
-# from moveit_configs_utils.launches import generate_move_group_launch
-# def generate_launch_description():
-#     moveit_config = MoveItConfigsBuilder("turtlebot3_manipulation",
-#                     package_name="turtlebot3_manipulation_moveit_config").to_moveit_configs()
-#     return generate_move_group_launch(moveit_config)
-
-
 import os
 import yaml
 import xacro
@@ -73,14 +64,16 @@ def generate_launch_description():
     # Planning Functionality
     ompl_planning_pipeline_config = {
         "move_group": {
-            "planning_plugin": "ompl_interface/OMPLPlanner",
-            "request_adapters": """default_planner_request_adapters/AddTimeOptimalParameterization \
-            default_planner_request_adapters/FixWorkspaceBounds \
-            default_planner_request_adapters/FixStartStateBounds \
-            default_planner_request_adapters/FixStartStateCollision \
-            default_planner_request_adapters/FixStartStatePathConstraints""",
-            "start_state_max_bounds_error": 0.1,
+            "planning_plugins": ["ompl_interface/OMPLPlanner"],
+            "request_adapters": [
+                # "default_planner_request_adapters/AddTimeOptimalParameterization",
+                "default_planner_request_adapters/FixWorkspaceBounds",
+                "default_planner_request_adapters/FixStartStateBounds",
+                "default_planner_request_adapters/FixStartStateCollision",
+                "default_planner_request_adapters/FixStartStatePathConstraints",],
+                "start_state_max_bounds_error": 0.1,
         }
+
     }
     ompl_planning_yaml_path = os.path.join(
         get_package_share_directory("turtlebot3_manipulation_moveit_config"),
@@ -124,30 +117,27 @@ def generate_launch_description():
         "publish_robot_description_semantic": True
     }
 
-    ld = LaunchDescription()
     use_sim = LaunchConfiguration('use_sim')
-    declare_use_sim = DeclareLaunchArgument(
-        'use_sim',
-        default_value='true',
-        description='Start robot in Gazebo simulation.')
-    ld.add_action(declare_use_sim)
 
-    move_group_node = Node(
-        package="moveit_ros_move_group",
-        executable="move_group",
-        output="screen",
-        parameters=[
-            robot_description,
-            robot_description_semantic,
-            kinematics_yaml,
-            ompl_planning_pipeline_config,
-            trajectory_execution,
-            moveit_controllers,
-            planning_scene_monitor_parameters,
-            {'use_sim_time': use_sim},
-        ],
-    )
+    return LaunchDescription([
+        DeclareLaunchArgument(
+            'use_sim',
+            default_value='true',
+            description='Start robot in Gazebo simulation.'),
 
-    ld.add_action(move_group_node)
-
-    return ld
+        Node(
+            package="moveit_ros_move_group",
+            executable="move_group",
+            output="screen",
+            parameters=[
+                robot_description,
+                robot_description_semantic,
+                kinematics_yaml,
+                ompl_planning_pipeline_config,
+                trajectory_execution,
+                moveit_controllers,
+                planning_scene_monitor_parameters,
+                {'use_sim_time': use_sim},
+            ],
+        )
+ ])

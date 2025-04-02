@@ -7,7 +7,7 @@ moveit_setup_assistant_config:
   package_settings:
     author_name: Hye-jong KIM
     author_email: hjkim@robotis.com
-    generated_timestamp: 1663146822
+    generated_timestamp: 1743277546
   control_xacro:
     command:
       - position

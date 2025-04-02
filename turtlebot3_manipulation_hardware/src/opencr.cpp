@@ -21,6 +21,9 @@
 #include <memory>
 #include <string>
 #include <vector>
+#include <iostream>
+#include <iomanip>
+#include <cstdint> 
 
 namespace robotis
 {
@@ -64,6 +67,8 @@ uint16_t OpenCR::ping()
 
 bool OpenCR::is_connect_manipulator()
 {
+  std::cout << "********** is_connect_manipulator: 0x" << std::setfill('0') << std::setw(2) << std::hex << static_cast<int>(dxl_sdk_wrapper_->read_byte(opencr_control_table.connect_manipulator.address)) << std::endl;  
+  std::cout << "********** opencr_control_table.connect_manipulator.address: 0x" << std::setfill('0') << std::setw(2) << std::hex << static_cast<int>(opencr_control_table.connect_manipulator.address) << std::endl;  
   return dxl_sdk_wrapper_->read_byte(opencr_control_table.connect_manipulator.address);
 }
 

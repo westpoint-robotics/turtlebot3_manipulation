@@ -1,6 +1,7 @@
 teleop_twist_joy_node:
   ros__parameters:
     use_sim_time: true
+    log_level: "warn"
     axis_linear:  # Left thumb stick vertical
       x: 1
     scale_linear:
@@ -16,14 +17,7 @@ teleop_twist_joy_node:
     enable_button: 4  # Left trigger button
     enable_turbo_button: 5  # Right trigger button
 
-gz_ros_control:
+teleop_node:
   ros__parameters:
     use_sim_time: True
-
-rviz2:
-  ros__parameters:
-    use_sim_time: True
-
-joy_node:
-  ros__parameters:
-    use_sim_time: True
+    log_level: "warn"

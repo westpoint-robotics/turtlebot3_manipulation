@@ -139,6 +139,7 @@ def generate_launch_description():
     )
 
     control_node = Node(
+        condition=UnlessCondition(use_sim),
         package='controller_manager',
         executable='ros2_control_node',
         parameters=[
@@ -149,8 +150,7 @@ def generate_launch_description():
             ('~/cmd_vel_unstamped', 'cmd_vel'),
             ('~/odom', 'odom')
         ],
-        output="both",
-        condition=UnlessCondition(use_sim))
+        output="both",)
 
     robot_state_pub_node = Node(
         package='robot_state_publisher',

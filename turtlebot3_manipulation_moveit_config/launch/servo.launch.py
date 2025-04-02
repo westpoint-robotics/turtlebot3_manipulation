@@ -70,6 +70,7 @@ def generate_launch_description():
         "kinematics.yaml",
     )
     with open(kinematics_yaml_path, "r") as file:
+        print(f'\n\nkinematics_yaml_path: {kinematics_yaml_path}\n\n')
         kinematics_yaml = yaml.safe_load(file)
 
     # Get parameters for the Servo node

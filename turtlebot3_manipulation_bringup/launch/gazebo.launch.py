@@ -27,6 +27,7 @@ from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration
 from launch.substitutions import PathJoinSubstitution
 from launch.substitutions import ThisLaunchFileDir
+from launch.substitutions import TextSubstitution
 
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
@@ -99,6 +100,12 @@ def generate_launch_description():
         AppendEnvironmentVariable('GZ_SIM_RESOURCE_PATH', bringup_model_dir),
         AppendEnvironmentVariable('GZ_SIM_RESOURCE_PATH',desc_mesh_dir),
         AppendEnvironmentVariable('GZ_SIM_RESOURCE_PATH',desc_urdf_dir),
+
+        DeclareLaunchArgument(
+            "log_level",
+            default_value = TextSubstitution(text=str("WARN")),
+            description="Logging level"
+        ),
 
         DeclareLaunchArgument(
             'start_rviz',
@@ -182,6 +189,7 @@ def generate_launch_description():
             launch_arguments={'gz_args': ['-r -s -v1 ', world]}.items(),
         ),
             
+        #TODO Add conditional launch argument for this    
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(
                 os.path.join(get_package_share_directory('ros_gz_sim'),
@@ -201,7 +209,8 @@ def generate_launch_description():
             launch_arguments={'config_filepath': joy_configs,
                           'joy_dev': '0',
                           'joy_vel': 'cmd_vel_joy',
-                          'use_sim': use_sim_time,                          
+                          'use_sim': use_sim_time,       
+
                           'publish_stamped_twist': 'true',}.items()),        
 
         Node(
@@ -213,7 +222,7 @@ def generate_launch_description():
                     'config_file': ros_gz_bridge_config,
                     'use_sim_time': use_sim_time,
             }],
-            output='screen',
+            output={'both': 'log'},
         ),        
 
         Node(
@@ -221,7 +230,7 @@ def generate_launch_description():
             executable='image_bridge',
             name='bridge_gz_ros_camera_image',
             namespace=namespace,
-            output='screen',
+            output={'both': 'log'},
             parameters=[{
                 'use_sim_time': use_sim_time,
             }],
@@ -233,7 +242,7 @@ def generate_launch_description():
             executable='image_bridge',
             name='bridge_gz_ros_camera_depth',
             namespace=namespace,
-            output='screen',
+            output={'both': 'log'},
             parameters=[{
                 'use_sim_time': use_sim_time,
             }],
@@ -244,7 +253,7 @@ def generate_launch_description():
             package='ros_gz_sim',
             executable='create',
             namespace=namespace,
-            output='screen',
+            output={'both': 'log'},
             arguments=[
                 '-name', robot_name,
                 '-topic', 'robot_description',

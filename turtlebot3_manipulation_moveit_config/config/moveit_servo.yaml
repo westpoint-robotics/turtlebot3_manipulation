@@ -13,7 +13,7 @@ scale:
   joint: 0.5
 
 ## Properties of outgoing commands
-publish_period: 0.034  # 1/Nominal publish rate [seconds]
+publish_period: 0.032  # 1/Nominal publish rate [seconds]
 low_latency_mode: false  # Set this to true to publish as soon as an incoming Twist command is received (publish_period is ignored)
 
 # What type of topic does your robot driver expect?
@@ -30,7 +30,7 @@ low_pass_filter_coeff: 2.0  # Larger --> trust the filtered data more, trust the
 
 ## MoveIt properties
 move_group_name: arm  # Often 'manipulator' or 'arm'
-planning_frame: base_link  # The MoveIt planning frame. Often 'base_link' or 'world'
+planning_frame: world  # The MoveIt planning frame. Often 'base_link' or 'world'
 
 ## Other frames
 ee_frame_name: end_effector_link  # The name of the end effector link, used to return the EE pose

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 #
-# Copyright 2020 ROBOTIS CO., LTD.
+# Copyright 2024 ROBOTIS CO., LTD.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-# Authors: Hye-jong KIM
+# Author: Wonho Yoon, Sungho Woo
 
 import os
 import xacro
@@ -39,7 +39,7 @@ def generate_launch_description():
         os.path.join(
             get_package_share_directory("turtlebot3_manipulation_description"),
             "urdf",
-            "turtlebot3_manipulation.urdf.xacro",
+            "open_manipulator_x_robot.urdf.xacro",
         )
     )
     robot_description = {"robot_description": robot_description_config.toxml()}
@@ -48,7 +48,7 @@ def generate_launch_description():
     robot_description_semantic_path = os.path.join(
         get_package_share_directory("turtlebot3_manipulation_moveit_config"),
         "config",
-        "turtlebot3_manipulation.srdf",
+        "open_manipulator_x.srdf",
     )
     with open(robot_description_semantic_path, "r") as file:
         robot_description_semantic_config = file.read()
@@ -60,13 +60,18 @@ def generate_launch_description():
     # Planning Functionality
     ompl_planning_pipeline_config = {
         "move_group": {
-            "planning_plugins": ["ompl_interface/OMPLPlanner"],
+            "planning_plugins": ["ompl_interface/OMPLPlanner",],
             "request_adapters": [
-                "default_planner_request_adapters/AddTimeOptimalParameterization",
-                "default_planner_request_adapters/FixWorkspaceBounds",
-                "default_planner_request_adapters/FixStartStateBounds",
-                "default_planner_request_adapters/FixStartStateCollision",
-                "default_planner_request_adapters/FixStartStatePathConstraints",],
+                "default_planning_request_adapters/ResolveConstraintFrames",
+                "default_planning_request_adapters/ValidateWorkspaceBounds",
+                "default_planning_request_adapters/CheckStartStateBounds",
+                "default_planning_request_adapters/CheckStartStateCollision",
+            ],
+            "response_adapters": [
+                "default_planning_response_adapters/AddTimeOptimalParameterization",
+                "default_planning_response_adapters/ValidateSolution",
+                "default_planning_response_adapters/DisplayMotionPath",
+            ],
             "start_state_max_bounds_error": 0.1,
         }
     }
@@ -88,7 +93,27 @@ def generate_launch_description():
     with open(kinematics_yaml_path, "r") as file:
         kinematics_yaml = yaml.safe_load(file)
 
+    robot_description_kinematics = {"robot_description_kinematics": kinematics_yaml}
+    # joint_limits yaml
+    joint_limits_yaml_path = os.path.join(
+        get_package_share_directory("turtlebot3_manipulation_moveit_config"),
+        "config",
+        "joint_limits.yaml",
+    )
+    with open(joint_limits_yaml_path, "r") as file:
+        joint_limits_yaml = yaml.safe_load(file)
+    robot_description_joint_limits = {"robot_description_planning": joint_limits_yaml}
+
     ld = LaunchDescription()
+
+    # warehouse_ros_config = {
+    #     # For warehouse_ros_sqlite
+    #     "warehouse_plugin": "warehouse_ros_sqlite::DatabaseConnection",
+    #     "warehouse_host": "/home/robotis/warehouse_db.sqlite", # change to your path
+    #     "port": 33829,
+    #     "scene_name": "",  # If scene name is empty, all scenes will be used
+    #     "queries_regex": ".*",
+    # }
 
     rviz_node = Node(
         package="rviz2",
@@ -97,10 +122,12 @@ def generate_launch_description():
         output="log",
         arguments=["-d", rviz_config],
         parameters=[
-            robot_description,
-            robot_description_semantic,
+            # robot_description,
+            # robot_description_semantic,
+            robot_description_kinematics,
+            robot_description_joint_limits,
             ompl_planning_pipeline_config,
-            kinematics_yaml,
+            # warehouse_ros_config,
         ]
     )
 

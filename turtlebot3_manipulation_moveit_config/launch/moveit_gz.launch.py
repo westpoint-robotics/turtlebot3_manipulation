@@ -19,28 +19,44 @@
 import os
 
 from launch import LaunchDescription
+from launch.actions import DeclareLaunchArgument
 from launch.actions import IncludeLaunchDescription
+from launch.substitutions import PathJoinSubstitution
 from launch.launch_description_sources import PythonLaunchDescriptionSource
+from launch_ros.substitutions import FindPackageShare
 from ament_index_python.packages import get_package_share_directory
+from launch.conditions import IfCondition
+from launch.substitutions import LaunchConfiguration
 
 
 def generate_launch_description():
 
-    ld = LaunchDescription()
+    # gazebo_control with robot_state_publisher
     launch_dir = os.path.join(
         get_package_share_directory(
             'turtlebot3_manipulation_moveit_config'), 'launch')
 
-    # RViz
-    rviz_launch = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource([launch_dir, '/moveit_rviz.launch.py'])
-    )
-    ld.add_action(rviz_launch)
+    start_rviz = LaunchConfiguration('start_rviz')
 
-    # move_group
-    move_group_launch = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource([launch_dir, '/move_group.launch.py'])
-    )
-    ld.add_action(move_group_launch)
+    return LaunchDescription([
 
-    return ld
+        DeclareLaunchArgument(
+            'start_rviz',
+            default_value='false',
+            description='Whether execute rviz2'),
+
+        # Optional start of RVIZ
+        IncludeLaunchDescription(
+            PythonLaunchDescriptionSource([launch_dir, '/moveit_rviz.launch.py']),
+            condition=IfCondition(start_rviz),
+        ),
+
+        # move_group
+        IncludeLaunchDescription(
+            PythonLaunchDescriptionSource([launch_dir, '/move_group.launch.py']),
+            launch_arguments={
+                'use_sim': 'true',
+            }.items(),
+        ),
+    ])
+
