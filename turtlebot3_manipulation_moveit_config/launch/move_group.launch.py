@@ -73,7 +73,6 @@ def generate_launch_description():
                 "default_planner_request_adapters/FixStartStatePathConstraints",],
                 "start_state_max_bounds_error": 0.1,
         }
-
     }
     ompl_planning_yaml_path = os.path.join(
         get_package_share_directory("turtlebot3_manipulation_moveit_config"),
