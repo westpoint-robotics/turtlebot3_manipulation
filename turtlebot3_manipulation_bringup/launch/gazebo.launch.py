@@ -201,7 +201,7 @@ def generate_launch_description():
             launch_arguments={'config_filepath': joy_configs,
                           'joy_dev': '0',
                           'joy_vel': 'cmd_vel_joy',
-                          'use_sim': use_sim_time,                          
+                          'use_sim': use_sim_time,
                           'publish_stamped_twist': 'true',}.items()),        
 
         Node(
