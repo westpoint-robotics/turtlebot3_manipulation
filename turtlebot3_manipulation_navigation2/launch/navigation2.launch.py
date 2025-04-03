@@ -56,7 +56,7 @@ def generate_launch_description():
             [
                 FindPackageShare('turtlebot3_manipulation_navigation2'),
                 'param',
-                'turtlebot3.yaml'
+                'wp_nav2_params.yaml'
             ]
         )
     )
@@ -87,7 +87,7 @@ def generate_launch_description():
     return LaunchDescription([
         DeclareLaunchArgument(
             'start_rviz',
-            default_value='true',
+            default_value='True',
             description='Whether execute rviz2'),
 
         DeclareLaunchArgument(
@@ -112,7 +112,7 @@ def generate_launch_description():
 
         DeclareLaunchArgument(
             'autostart',
-            default_value='true',
+            default_value='True',
             description='Automatically startup the nav2 stack'),
 
         DeclareLaunchArgument(
@@ -128,7 +128,7 @@ def generate_launch_description():
 
         DeclareLaunchArgument(
             'slam',
-            default_value='true',
+            default_value='True',
             description='Use SLAM'), 
 
         IncludeLaunchDescription(
