@@ -255,7 +255,7 @@ def main(args=None):
     except (KeyboardInterrupt, rclpy.executors.ExternalShutdownException):
         print("Keyboard interrupt received. Shutting down node.")
         # Send stop command to diff drive
-        publisher_joint_trajectory.pub_vel(0.0,0.0)
+        node.pub_vel(0.0,0.0)
 
     except Exception as e:
         print(f"Unhandled exception: {traceback.format_exc()}")
