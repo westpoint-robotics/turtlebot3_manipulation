@@ -365,7 +365,7 @@ waypoint_follower:
     wait_at_waypoint:
       plugin: "nav2_waypoint_follower::WaitAtWaypoint"
       enabled: True
-      waypoint_pause_duration: 200
+      waypoint_pause_duration: 0
 
 velocity_smoother:
   ros__parameters:
@@ -389,7 +389,6 @@ collision_monitor:
     base_frame_id: "base_footprint"
     odom_frame_id: "odom"
     cmd_vel_in_topic: "cmd_vel_smoothed"
-    cmd_vel_out_topic: "cmd_vel"
     cmd_vel_out_topic: "diff_drive_controller/cmd_vel"
     enable_stamped_cmd_vel: true
     state_topic: "collision_monitor_state"

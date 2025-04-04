@@ -23,7 +23,9 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'manipulatorpy_node = tbot3_manipulation_python.manipulatorpy_node:main'
+            'manipulatorpy_node = tbot3_manipulation_python.manipulatorpy_node:main',
+            'waypoint_node = tbot3_manipulation_python.waypoint_follower:main',
+            'tf2pose_node = tbot3_manipulation_python.tf2pose:main'
         ],
     },
 )

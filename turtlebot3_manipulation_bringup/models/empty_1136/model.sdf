@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<sdf version="1.5">
+  <model name="empty_1136">
+    <pose>-10.5 -5.0 0 0 0 0</pose>
+    <static>true</static>
+
+    <link name="exterior_link">
+      <collision name="base">
+        <geometry>
+          <mesh>
+            <uri>model://empty_1136/meshes/Small_BuildingV3_exterior.dae</uri>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model://empty_1136/meshes/Small_BuildingV3_exterior.dae</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+
+  </model>
+</sdf>
