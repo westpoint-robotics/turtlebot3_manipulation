@@ -81,7 +81,7 @@ def generate_launch_description():
             [
                 FindPackageShare('turtlebot3_manipulation_bringup'),
                 'worlds',
-                'turtlebot3_world.model'
+                'maze_world.model'
             ]
         )
     )

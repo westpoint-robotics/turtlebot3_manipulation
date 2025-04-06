@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<sdf version="1.5">
+  <model name="ee484_maze">
+    <pose>0.0 0.0 0 0 0 0</pose>
+    <static>true</static>
+
+    <link name="exterior_link">
+      <collision name="base">
+        <geometry>
+          <mesh>
+            <scale>1.5 1.5 1</scale>
+            <uri>model://ee484_maze/meshes/ee484_maze.dae</uri>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <scale>1.5 1.5 1</scale>
+            <uri>model://ee484_maze/meshes/ee484_maze.dae</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+
+  </model>
+</sdf>
