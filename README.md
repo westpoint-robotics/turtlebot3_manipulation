@@ -14,7 +14,7 @@
       - Then drop a goal to navigate toward with the "Nav2 Goal" button  
 
   3. Run NAV2 with SLAM (No known map)  
-  `ros2 launch turtlebot3_manipulation_navigation2 navigation2_use_sim_time.launch.py use_slam:='True'`
+  `ros2 launch turtlebot3_manipulation_navigation2 navigation2_use_sim_time.launch.py slam:='True'`
       - After RVIZ opens, wait about 1 minute for initial map to be generated
       - Then drop a goal to navigate toward with the "Nav2 Goal" button
 
