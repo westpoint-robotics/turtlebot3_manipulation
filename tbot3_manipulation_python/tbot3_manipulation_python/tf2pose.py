@@ -8,14 +8,14 @@ from rclpy.node import Node
 from tf2_ros import TransformException
 from tf2_ros.buffer import Buffer
 from tf2_ros.transform_listener import TransformListener
-
-from turtlesim.srv import Spawn
-
+import numpy as np
+import transforms3d
 
 class FrameListener(Node):
 
     def __init__(self):
         super().__init__('turtle_tf2_frame_listener')
+        self.get_logger().info(f'Starting TF2 FRame Listener')
 
         # Declare and acquire `target_frame` parameter
         self.target_frame = self.declare_parameter(
@@ -24,26 +24,13 @@ class FrameListener(Node):
         self.tf_buffer = Buffer()
         self.tf_listener = TransformListener(self.tf_buffer, self)
 
-        # Create a client to spawn a turtle
-        #self.spawner = self.create_client(Spawn, 'spawn')
-        # Boolean values to store the information
-        # if the service for spawning turtle is available
-        #self.turtle_spawning_service_ready = False
-        # if the turtle was successfully spawned
-        #self.turtle_spawned = False
-
-        # Create turtle2 velocity publisher
-        #self.publisher = self.create_publisher(Twist, 'turtle2/cmd_vel', 1)
-
         # Call on_timer function every second
         self.timer = self.create_timer(1.0, self.on_timer)
 
     def on_timer(self):
         # Store frame names in variables that will be used to
         # compute transformations
-        # from_frame_rel = self.target_frame
-        # to_frame_rel = 'turtle2'
-        from_frame_rel = 'map'
+        from_frame_rel = 'odom'
         to_frame_rel = 'base_link'
 
         # Look up for the transformation between target_frame and turtle2 frames
@@ -53,8 +40,26 @@ class FrameListener(Node):
                 to_frame_rel,
                 from_frame_rel,
                 rclpy.time.Time())
-            self.get_logger().info(
-                f'Transformed {to_frame_rel} to {from_frame_rel}: {t}')
+            
+                    # Extract quaternion from the message
+            quat = [t.transform.rotation.x,t.transform.rotation.y,t.transform.rotation.z,t.transform.rotation.w]
+        
+            # Convert quaternion to Euler angles (roll, pitch, yaw)
+            # transforms3d uses XYZW order, ROS 2 uses XYZW order too
+            euler = transforms3d.euler.quat2euler(quat, 'sxyz')
+        
+            # Convert to degrees for better readability
+            euler_degrees = [np.degrees(angle) for angle in euler]
+        
+             # Print results
+            # self.get_logger().info(f'Quaternion: [{quat[0]:.4f}, {quat[1]:.4f}, {quat[2]:.4f}, {quat[3]:.4f}]')
+            # self.get_logger().info(f'Euler angles (rad): [{euler[0]:.4f}, {euler[1]:.4f}, {euler[2]:.4f}]')
+            # self.get_logger().info(f'Euler angles (deg): [{euler_degrees[0]:.4f}, {euler_degrees[1]:.4f}, {euler_degrees[2]:.4f}]')
+
+
+            self.get_logger().info(f'Transformed {to_frame_rel} to {from_frame_rel}: \
+                                   \n\tTaranslation: {t.transform.translation.x:.4f}, {t.transform.translation.y:.4f} \
+                                   \n\tEuler angles (deg): [{euler_degrees[0]:.4f}, {euler_degrees[1]:.4f}, {euler_degrees[2]:.4f}]')
             
         except TransformException as ex:
             self.get_logger().info(
@@ -77,6 +82,7 @@ class FrameListener(Node):
 def main():
     rclpy.init()
     node = FrameListener()
+    node.get_logger().info(f'Starting TF2 FRame Listener2')
     try:
         rclpy.spin(node)
     except KeyboardInterrupt:

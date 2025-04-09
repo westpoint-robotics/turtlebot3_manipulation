@@ -179,6 +179,7 @@ def generate_launch_description():
         package='controller_manager',
         executable='spawner',
         arguments=['diff_drive_controller', '-c', '/controller_manager',],
+        remappings={('odom', 'odom_opencr')},
         output='screen',)
 
     imu_broadcaster_spawner = Node(

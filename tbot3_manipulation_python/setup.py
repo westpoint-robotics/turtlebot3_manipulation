@@ -27,6 +27,7 @@ setup(
             'waypoint_node = tbot3_manipulation_python.waypoint_follower:main',
             'tf2pose_node = tbot3_manipulation_python.tf2pose:main',
             'object_recognition_node = tbot3_manipulation_python.object_recognition_node:main',
+            'odom_calibrated = tbot3_manipulation_python.odom_corr_node:main',
         ],
     },
 )
