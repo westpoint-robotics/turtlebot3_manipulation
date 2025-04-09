@@ -147,7 +147,7 @@ def generate_launch_description():
         ],
         remappings=[
             ('~/cmd_vel_unstamped', 'cmd_vel'),
-            ('~/odom', 'odom')
+            ('~/odom', 'odom_opencr')
         ],
         output="both",
         condition=UnlessCondition(use_sim))
@@ -175,13 +175,18 @@ def generate_launch_description():
         output='screen',
     )
 
+    odom_calibrated_node = Node(
+        package='tbot3_manipulation_python',
+        executable='odom_calibrated',
+        output='screen',)
+
     diff_drive_controller_spawner = Node(
         package='controller_manager',
         executable='spawner',
         arguments=['diff_drive_controller', '-c', '/controller_manager',],
-        remappings={('odom', 'odom_opencr')},
+        # remappings={('odom', 'odom_opencr')},
         output='screen',)
-
+    
     imu_broadcaster_spawner = Node(
         package='controller_manager',
         executable='spawner',
@@ -254,6 +259,7 @@ def generate_launch_description():
     nodes = [
         control_node,
         robot_state_pub_node,
+        odom_calibrated_node,
         # twist_mux_node,
         joint_state_broadcaster_spawner,
         delay_rviz_after_joint_state_broadcaster_spawner,
