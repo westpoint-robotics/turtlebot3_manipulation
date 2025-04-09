@@ -224,20 +224,20 @@ def generate_launch_description():
             parameters=[{
                 'use_sim_time': use_sim_time,
             }],
-            arguments=['/rgbd_camera/image']
+            arguments=['/camera/image']
         ),
 
-        Node(
-            package='ros_gz_image',
-            executable='image_bridge',
-            name='bridge_gz_ros_camera_depth',
-            namespace=namespace,
-            output='screen',
-            parameters=[{
-                'use_sim_time': use_sim_time,
-            }],
-            arguments=['/rgbd_camera/depth_image']
-        ),
+        # Node(
+        #     package='ros_gz_image',
+        #     executable='image_bridge',
+        #     name='bridge_gz_ros_camera_depth',
+        #     namespace=namespace,
+        #     output='screen',
+        #     parameters=[{
+        #         'use_sim_time': use_sim_time,
+        #     }],
+        #     arguments=['/rgbd_camera/depth_image']
+        # ),
 
         Node(
             package='ros_gz_sim',

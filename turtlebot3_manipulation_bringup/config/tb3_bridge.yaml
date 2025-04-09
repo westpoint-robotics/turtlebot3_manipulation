@@ -52,8 +52,19 @@
   direction: ROS_TO_GZ
 
 # replace camera_info_bridge
-- ros_topic_name: "rgbd_camera/camera_info"
-  gz_topic_name: "/rgbd_camera/camera_info"
+- ros_topic_name: "camera/camera_info"
+  gz_topic_name: "/camera/camera_info"
   ros_type_name: "sensor_msgs/msg/CameraInfo"
   gz_type_name: "gz.msgs.CameraInfo"
   direction: GZ_TO_ROS
+
+# replace camera_info_bridge
+- ros_topic_name: "camera/image"
+  gz_topic_name: "/camera/image_raw"
+  ros_type_name: "sensor_msgs/msg/Image"
+  gz_type_name: "gz.msgs.Image"
+  direction: GZ_TO_ROS
+
+# /rgbd_camera/camera_info
+# /rgbd_camera/depth_image
+# /rgbd_camera/image

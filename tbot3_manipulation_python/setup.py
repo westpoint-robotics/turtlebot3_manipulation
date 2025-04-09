@@ -25,7 +25,8 @@ setup(
         'console_scripts': [
             'manipulatorpy_node = tbot3_manipulation_python.manipulatorpy_node:main',
             'waypoint_node = tbot3_manipulation_python.waypoint_follower:main',
-            'tf2pose_node = tbot3_manipulation_python.tf2pose:main'
+            'tf2pose_node = tbot3_manipulation_python.tf2pose:main',
+            'object_recognition_node = tbot3_manipulation_python.object_recognition_node:main',
         ],
     },
 )
