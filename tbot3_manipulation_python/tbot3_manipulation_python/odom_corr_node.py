@@ -88,7 +88,8 @@ class OdomRepublisherNode(Node):
         result_pose = Pose()
         result_pose.position = result_position
         result_pose.orientation = result_orientation
-        
+                # result_q = euler2quat(result_yaw, result_pitch, result_roll, 'sxyz')
+
         return result_pose
     
 
@@ -158,7 +159,6 @@ class OdomRepublisherNode(Node):
         #                          \n\tpose2_euler: {pose2_euler} radians \
         #                          \n\tposeF_euler: {poseF_euler} radians")
 
-        # result_q = euler2quat(result_yaw, result_pitch, result_roll, 'sxyz')
         result_q = euler2quat(result_roll, result_pitch, result_yaw, 'sxyz')
 
         
@@ -184,10 +184,7 @@ class OdomRepublisherNode(Node):
         """
         if not self.offset:
             self.offset = msg.pose.pose
-            self.get_logger().info(f"USING ODOM OFFEST: /n/tPose: {self.offset.position}\n\tRotation:{self.offset.orientation}")
-
-
-
+            self.get_logger().info(f"\nUSING ODOM OFFEST: \n\tPose: {self.offset.position}\n\tRotation:{self.offset.orientation}")
 
         odom_out_msg = msg
 
