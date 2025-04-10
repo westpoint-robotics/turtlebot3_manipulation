@@ -184,6 +184,10 @@ class OdomRepublisherNode(Node):
         """
         if not self.offset:
             self.offset = msg.pose.pose
+            self.get_logger().info(f"USING ODOM OFFEST: /n/tPose: {self.offset.position}\n\tRotation:{self.offset.orientation}")
+
+
+
 
         odom_out_msg = msg
 
