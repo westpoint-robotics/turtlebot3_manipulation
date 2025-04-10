@@ -187,7 +187,7 @@ class OdomRepublisherNode(Node):
 
         odom_out_msg = msg
 
-        odom_out_msg.pose.pose = self.subtract_poses(self.offset, msg.pose.pose)
+        odom_out_msg.pose.pose = self.subtract_poses(msg.pose.pose, self.offset)
 
         # Republish the odometry message
         self.publisher.publish(odom_out_msg)

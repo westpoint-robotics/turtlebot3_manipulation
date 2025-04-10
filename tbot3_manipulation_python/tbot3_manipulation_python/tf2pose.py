@@ -31,7 +31,7 @@ class FrameListener(Node):
         # Store frame names in variables that will be used to
         # compute transformations
         from_frame_rel = 'odom'
-        to_frame_rel = 'base_link'
+        to_frame_rel = 'base_footprint'
 
         # Look up for the transformation between target_frame and turtle2 frames
         # and send velocity commands for turtle2 to reach target_frame
@@ -58,7 +58,7 @@ class FrameListener(Node):
             # self.get_logger().info(f'Euler angles (deg): [{euler_degrees[0]:.4f}, {euler_degrees[1]:.4f}, {euler_degrees[2]:.4f}]')
 
 
-            self.get_logger().info(f'Transformed {to_frame_rel} to {from_frame_rel}: \
+            self.get_logger().info(f'Transformed from {from_frame_rel} to {to_frame_rel}  \
                                    \n\tTranslation: {t.transform.translation.x:.2f}, {t.transform.translation.y:.2f} \
                                    \n\tEuler angles (rad): [{euler[0]:.4f}, {euler[1]:.4f}, {euler[2]:.4f}] \
                                    \n\tEuler angles (deg): [{euler_degrees[0]:.2f}, {euler_degrees[1]:.2f}, {euler_degrees[2]:.2f}] \
