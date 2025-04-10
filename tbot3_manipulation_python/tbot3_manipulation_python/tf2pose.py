@@ -42,7 +42,8 @@ class FrameListener(Node):
                 rclpy.time.Time())
             
                     # Extract quaternion from the message
-            quat = [t.transform.rotation.x,t.transform.rotation.y,t.transform.rotation.z,t.transform.rotation.w]
+            quat = [t.transform.rotation.w,t.transform.rotation.x,t.transform.rotation.y,t.transform.rotation.z]
+            #quat = [t.transform.rotation.x,t.transform.rotation.y,t.transform.rotation.z,t.transform.rotation.w]
         
             # Convert quaternion to Euler angles (roll, pitch, yaw)
             # transforms3d uses XYZW order, ROS 2 uses XYZW order too
@@ -58,7 +59,7 @@ class FrameListener(Node):
 
 
             self.get_logger().info(f'Transformed {to_frame_rel} to {from_frame_rel}: \
-                                   \n\tTaranslation: {t.transform.translation.x:.4f}, {t.transform.translation.y:.4f} \
+                                   \n\tTranslation: {t.transform.translation.x:.4f}, {t.transform.translation.y:.4f} \
                                    \n\tEuler angles (deg): [{euler_degrees[0]:.4f}, {euler_degrees[1]:.4f}, {euler_degrees[2]:.4f}]')
             
         except TransformException as ex:

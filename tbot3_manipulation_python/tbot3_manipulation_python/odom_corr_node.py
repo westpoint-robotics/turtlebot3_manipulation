@@ -8,7 +8,8 @@ import tf2_ros
 from tf2_ros import TransformBroadcaster
 from geometry_msgs.msg import Pose, Point, Quaternion
 import numpy as np
-from transforms3d.quaternions import qmult, qinverse
+from transforms3d.quaternions import qmult, qinverse, quat2mat, mat2quat
+from transforms3d.euler import quat2euler, euler2quat
 
 
 class OdomRepublisherNode(Node):
@@ -21,10 +22,10 @@ class OdomRepublisherNode(Node):
         super().__init__('odom_republisher')
         
         # Declare parameters with default values
-        self.declare_parameter('input_odom_topic', 'odom_opencr')
+        self.declare_parameter('input_odom_topic', 'diff_drive_controller/odom')
         self.declare_parameter('output_odom_topic', 'odom')
         self.declare_parameter('parent_frame', 'odom')
-        self.declare_parameter('child_frame', 'base_link')
+        self.declare_parameter('child_frame', 'base_footprint')
         
         # Get parameter values
         self.input_topic = self.get_parameter('input_odom_topic').value
@@ -90,6 +91,89 @@ class OdomRepublisherNode(Node):
         
         return result_pose
     
+
+    def subtract_poses2(self, pose1, pose2):
+        """
+        Subtract pose2 from pose1 (pose1 - pose2)
+        Returns the relative pose that would transform from pose2 to pose1
+        """
+        # Handle the position component (simple vector subtraction)
+        result_position = Point()
+        result_position.x = pose1.position.x - pose2.position.x
+        result_position.y = pose1.position.y - pose2.position.y
+        result_position.z = pose1.position.z - pose2.position.z
+        
+        # Convert quaternions to rotation matrices
+        q1 = [pose1.orientation.x, pose1.orientation.y, pose1.orientation.z, pose1.orientation.w]
+        q2 = [pose2.orientation.x, pose2.orientation.y, pose2.orientation.z, pose2.orientation.w]
+        
+        mat1 = quat2mat(q1)
+        mat2 = quat2mat(q2)
+        
+        # Calculate the relative rotation matrix: R_rel = R1 * R2^T
+        mat2_inv = np.transpose(mat2)
+        result_mat = np.dot(mat1, mat2_inv)
+        
+        # Convert the result back to quaternion
+        result_q = mat2quat(result_mat)
+        
+        # Create the result pose
+        result_pose = Pose()
+        result_pose.position = result_position
+        result_pose.orientation = Quaternion(
+            x=result_q[1], 
+            y=result_q[2], 
+            z=result_q[3],
+            w=result_q[0], 
+        )
+        
+        return result_pose
+
+    def subtract_poses3(self, pose1, pose2):
+        """
+        Subtract pose2 from pose1 (pose1 - pose2)
+        Returns the relative pose that would transform from pose2 to pose1
+        """
+        # Handle the position component (simple vector subtraction)
+        result_position = Point()
+        result_position.x = pose1.position.x - pose2.position.x
+        result_position.y = pose1.position.y - pose2.position.y
+        result_position.z = pose1.position.z - pose2.position.z
+        
+        # Convert quaternions to rotation matrices
+        q1 = [pose1.orientation.w, pose1.orientation.x, pose1.orientation.y, pose1.orientation.z]
+        q2 = [pose2.orientation.w, pose2.orientation.x, pose2.orientation.y, pose2.orientation.z]
+        
+        # Convert quaternion to Euler angles (roll, pitch, yaw)
+        # transforms3d uses XYZW order, ROS 2 uses XYZW order too
+        pose1_euler = quat2euler(q1, 'sxyz')
+        pose2_euler = quat2euler(q2, 'sxyz')
+        
+        result_roll = pose1_euler[0] - pose2_euler[0]
+        result_pitch = pose1_euler[1] - pose2_euler[1]
+        result_yaw = pose1_euler[2] - pose2_euler[2]
+        poseF_euler = (result_roll,result_pitch,result_yaw)
+
+        # self.get_logger().info(f"\n\tpose1_euler: {pose1_euler} radians \
+        #                          \n\tpose2_euler: {pose2_euler} radians \
+        #                          \n\tposeF_euler: {poseF_euler} radians")
+
+        # result_q = euler2quat(result_yaw, result_pitch, result_roll, 'sxyz')
+        result_q = euler2quat(result_roll, result_pitch, result_yaw, 'sxyz')
+
+        
+        # Create the result pose
+        result_pose = Pose()
+        result_pose.position = result_position
+        result_pose.orientation = Quaternion(
+            x=result_q[1], 
+            y=result_q[2], 
+            z=result_q[3],
+            w=result_q[0], 
+        )
+        
+        return result_pose
+    
     def odom_callback(self, msg: Odometry):
         """
         Callback function for the odometry subscription.
@@ -103,7 +187,7 @@ class OdomRepublisherNode(Node):
 
         odom_out_msg = msg
 
-        odom_out_msg.pose.pose = self.subtract_poses(msg.pose.pose, self.offset)
+        odom_out_msg.pose.pose = self.subtract_poses3(msg.pose.pose, self.offset)
 
         # Republish the odometry message
         self.publisher.publish(odom_out_msg)

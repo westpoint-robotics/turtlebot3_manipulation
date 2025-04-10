@@ -147,7 +147,7 @@ def generate_launch_description():
         ],
         remappings=[
             ('~/cmd_vel_unstamped', 'cmd_vel'),
-            ('~/odom', 'odom_opencr')
+            ('~/odom', 'diff_drive_controller/odom')
         ],
         output="both",
         condition=UnlessCondition(use_sim))
@@ -184,7 +184,6 @@ def generate_launch_description():
         package='controller_manager',
         executable='spawner',
         arguments=['diff_drive_controller', '-c', '/controller_manager',],
-        # remappings={('odom', 'odom_opencr')},
         output='screen',)
     
     imu_broadcaster_spawner = Node(
@@ -207,15 +206,6 @@ def generate_launch_description():
         arguments=['gripper_controller'],
         output='screen',
     )
-
-    # twist_mux_node= Node(
-    #         package='twist_mux',
-    #         executable='twist_mux',
-    #         output='screen',
-    #         remappings={('/cmd_vel_out', '/cmd_vel_nav')},
-    #         parameters=[
-    #             {'use_sim_time': LaunchConfiguration('use_sim_time')},
-    #             LaunchConfiguration('twist_mux_config')])
 
     delay_rviz_after_joint_state_broadcaster_spawner = RegisterEventHandler(
         event_handler=OnProcessExit(
