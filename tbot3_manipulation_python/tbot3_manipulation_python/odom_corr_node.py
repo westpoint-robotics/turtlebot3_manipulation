@@ -70,11 +70,11 @@ class OdomRepublisherNode(Node):
         # Convert ROS2 quaternions to numpy arrays
         q1 = np.array([pose1.orientation.w, pose1.orientation.x, 
                     pose1.orientation.y, pose1.orientation.z])
-        q2 = np.array([pose2.orientation.x, pose2.orientation.y, 
-                    pose2.orientation.z, pose2.orientation.w])
+        q2 = np.array([pose2.orientation.w, pose2.orientation.x, pose2.orientation.y, 
+                    pose2.orientation.z])
         
         # Invert q2 and multiply: q1 * q2^-1
-        q2_inv = qinverse([q2[3], q2[0], q2[1], q2[2]])  # Note: transforms3d uses wxyz order
+        q2_inv = qinverse([q2[0], q2[1], q2[2], q2[3]])  # Note: transforms3d uses wxyz order
         result_q = qmult([q1[0], q1[1], q1[2], q1[3]], q2_inv)
         
         # Convert back to ROS2 quaternion message
@@ -187,7 +187,7 @@ class OdomRepublisherNode(Node):
 
         odom_out_msg = msg
 
-        odom_out_msg.pose.pose = self.subtract_poses3(msg.pose.pose, self.offset)
+        odom_out_msg.pose.pose = self.subtract_poses(self.offset, msg.pose.pose)
 
         # Republish the odometry message
         self.publisher.publish(odom_out_msg)

@@ -161,7 +161,7 @@ def generate_launch_description():
             
         DeclareLaunchArgument(
             'use_joy',
-            default_value='True',
+            default_value='False',
             description='Whether to start joystick control nodes'),
 
         IncludeLaunchDescription(

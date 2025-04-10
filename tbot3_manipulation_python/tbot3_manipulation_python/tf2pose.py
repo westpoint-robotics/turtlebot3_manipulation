@@ -59,8 +59,10 @@ class FrameListener(Node):
 
 
             self.get_logger().info(f'Transformed {to_frame_rel} to {from_frame_rel}: \
-                                   \n\tTranslation: {t.transform.translation.x:.4f}, {t.transform.translation.y:.4f} \
-                                   \n\tEuler angles (deg): [{euler_degrees[0]:.4f}, {euler_degrees[1]:.4f}, {euler_degrees[2]:.4f}]')
+                                   \n\tTranslation: {t.transform.translation.x:.2f}, {t.transform.translation.y:.2f} \
+                                   \n\tEuler angles (rad): [{euler[0]:.4f}, {euler[1]:.4f}, {euler[2]:.4f}] \
+                                   \n\tEuler angles (deg): [{euler_degrees[0]:.2f}, {euler_degrees[1]:.2f}, {euler_degrees[2]:.2f}] \
+                                   \n\tQuaternion: (wxyz): [{quat[0]:.4f}, {quat[1]:.4f}, {quat[2]:.4f}, {quat[3]:.4f}]')
             
         except TransformException as ex:
             self.get_logger().info(
