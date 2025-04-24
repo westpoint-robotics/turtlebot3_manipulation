@@ -145,10 +145,10 @@ def generate_launch_description():
             {'robot_description': urdf_file},
             controller_manager_config
         ],
-        remappings=[
-            ('~/cmd_vel_unstamped', 'cmd_vel'),
-            ('~/odom', 'odom')
-        ],
+        # remappings=[
+        #     ('/diff_drive_controller/cmd_vel', '/cmd_vel'),
+        #     ('~/odom', 'odom')
+        # ],
         output="both",
         condition=UnlessCondition(use_sim))
 
@@ -179,6 +179,7 @@ def generate_launch_description():
         package='controller_manager',
         executable='spawner',
         arguments=['diff_drive_controller', '-c', '/controller_manager',],
+        #   "--controller-ros-args", "-r diff_drive_controller/cmd_vel:=cmd_vel", ],        
         output='screen',)
 
     imu_broadcaster_spawner = Node(
