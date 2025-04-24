@@ -146,7 +146,7 @@ def generate_launch_description():
             controller_manager_config
         ],
         # remappings=[
-        #     ('/diff_drive_controller/cmd_vel', '/cmd_vel'),
+        #     ('~/cmd_vel_unstamped', 'cmd_vel'),
         #     ('~/odom', 'odom')
         # ],
         output="both",
@@ -178,8 +178,8 @@ def generate_launch_description():
     diff_drive_controller_spawner = Node(
         package='controller_manager',
         executable='spawner',
-        arguments=['diff_drive_controller', '-c', '/controller_manager',],
-        #   "--controller-ros-args", "-r diff_drive_controller/cmd_vel:=cmd_vel", ],        
+        arguments=['diff_drive_controller', '-c', '/controller_manager',
+          "--controller-ros-args", "-r diff_drive_controller/cmd_vel:=cmd_vel", ],        
         output='screen',)
 
     imu_broadcaster_spawner = Node(
