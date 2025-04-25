@@ -32,8 +32,6 @@ from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
 from launch.conditions import IfCondition
 
-
-
 def is_valid_to_launch():
     # Path includes model name of Raspberry Pi series
     path = '/sys/firmware/devicetree/base/model'
@@ -41,7 +39,6 @@ def is_valid_to_launch():
         return False
     else:
         return True
-
 
 def generate_launch_description():
     if not is_valid_to_launch():

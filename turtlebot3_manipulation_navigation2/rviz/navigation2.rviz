@@ -210,6 +210,8 @@ Visualization Manager:
           Value: false
         link5:
           Value: false
+        odom:
+          Value: true
         wheel_left_link:
           Value: true
         wheel_right_link:
@@ -647,5 +649,5 @@ Window Geometry:
   Views:
     collapsed: false
   Width: 1545
-  X: 3815
-  Y: 170
+  X: 473
+  Y: 256
