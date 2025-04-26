@@ -225,47 +225,62 @@ hardware_interface::return_type TurtleBot3ManipulationSystemHardware::read(
     RCLCPP_WARN(logger, "Failed to read all control table");
   }
 
-  dxl_positions_[0] = opencr_->get_wheel_positions()[opencr::wheels::LEFT];
-  dxl_velocities_[0] = opencr_->get_wheel_velocities()[opencr::wheels::LEFT];
+  std::array<double, 2> wheel_positions = opencr_->get_wheel_positions();
+  std::array<double, 2> wheel_velocities = opencr_->get_wheel_velocities();
 
-  dxl_positions_[1] = opencr_->get_wheel_positions()[opencr::wheels::RIGHT];
-  dxl_velocities_[1] = opencr_->get_wheel_velocities()[opencr::wheels::RIGHT];
+  dxl_positions_[0] = wheel_positions[opencr::wheels::LEFT];
+  dxl_velocities_[0] = wheel_velocities[opencr::wheels::LEFT];
 
-  dxl_positions_[2] = opencr_->get_joint_positions()[opencr::joints::JOINT1];
-  dxl_velocities_[2] = opencr_->get_joint_velocities()[opencr::joints::JOINT1];
+  dxl_positions_[1] = wheel_positions[opencr::wheels::RIGHT];
+  dxl_velocities_[1] = wheel_velocities[opencr::wheels::RIGHT];
 
-  dxl_positions_[3] = opencr_->get_joint_positions()[opencr::joints::JOINT2];
-  dxl_velocities_[3] = opencr_->get_joint_velocities()[opencr::joints::JOINT2];
+  std::array<double, 4> joint_positions = opencr_->get_joint_positions();
+  std::array<double, 4> joint_velocities = opencr_->get_joint_velocities();
 
-  dxl_positions_[4] = opencr_->get_joint_positions()[opencr::joints::JOINT3];
-  dxl_velocities_[4] = opencr_->get_joint_velocities()[opencr::joints::JOINT3];
+  dxl_positions_[2] = joint_positions[opencr::joints::JOINT1];
+  dxl_velocities_[2] = joint_velocities[opencr::joints::JOINT1];
 
-  dxl_positions_[5] = opencr_->get_joint_positions()[opencr::joints::JOINT4];
-  dxl_velocities_[5] = opencr_->get_joint_velocities()[opencr::joints::JOINT4];
+  dxl_positions_[3] = joint_positions[opencr::joints::JOINT2];
+  dxl_velocities_[3] = joint_velocities[opencr::joints::JOINT2];
 
-  dxl_positions_[6] = opencr_->get_gripper_position();
-  dxl_velocities_[6] = opencr_->get_gripper_velocity();
+  dxl_positions_[4] = joint_positions[opencr::joints::JOINT3];
+  dxl_velocities_[4] = joint_velocities[opencr::joints::JOINT3];
 
-  dxl_positions_[7] = opencr_->get_gripper_position();
-  dxl_velocities_[7] = opencr_->get_gripper_velocity();
+  dxl_positions_[5] = joint_positions[opencr::joints::JOINT4];
+  dxl_velocities_[5] = joint_velocities[opencr::joints::JOINT4];
 
-  opencr_sensor_states_[0] = opencr_->get_imu().orientation.x;
-  opencr_sensor_states_[1] = opencr_->get_imu().orientation.y;
-  opencr_sensor_states_[2] = opencr_->get_imu().orientation.z;
-  opencr_sensor_states_[3] = opencr_->get_imu().orientation.w;
+  double gripper_position = opencr_->get_gripper_position();
+  double gripper_velocity = opencr_->get_gripper_velocity();
 
-  opencr_sensor_states_[4] = opencr_->get_imu().angular_velocity.x;
-  opencr_sensor_states_[5] = opencr_->get_imu().angular_velocity.y;
-  opencr_sensor_states_[6] = opencr_->get_imu().angular_velocity.z;
+  dxl_positions_[6] = gripper_position;
+  dxl_velocities_[6] = gripper_velocity;
 
-  opencr_sensor_states_[7] = opencr_->get_imu().linear_acceleration.x;
-  opencr_sensor_states_[8] = opencr_->get_imu().linear_acceleration.y;
-  opencr_sensor_states_[9] = opencr_->get_imu().linear_acceleration.z;
+  dxl_positions_[7] = gripper_position;
+  dxl_velocities_[7] = gripper_velocity;
 
-  opencr_sensor_states_[10] = opencr_->get_battery().voltage;
-  opencr_sensor_states_[11] = opencr_->get_battery().percentage;
-  opencr_sensor_states_[12] = opencr_->get_battery().design_capacity;
-  opencr_sensor_states_[13] = opencr_->get_battery().present;
+  opencr::IMU imu = opencr_->get_imu();
+
+  opencr_sensor_states_[0] = imu.orientation.x;
+  opencr_sensor_states_[1] = imu.orientation.y;
+  opencr_sensor_states_[2] = imu.orientation.z;
+  opencr_sensor_states_[3] = imu.orientation.w;
+
+  opencr_sensor_states_[4] = imu.angular_velocity.x;
+  opencr_sensor_states_[5] = imu.angular_velocity.y;
+  opencr_sensor_states_[6] = imu.angular_velocity.z;
+
+  opencr_sensor_states_[7] = imu.linear_acceleration.x;
+  opencr_sensor_states_[8] = imu.linear_acceleration.y;
+  opencr_sensor_states_[9] = imu.linear_acceleration.z;
+
+  opencr::Battery battery = opencr_->get_battery();
+
+  opencr_sensor_states_[10] = battery.voltage;
+  opencr_sensor_states_[11] = battery.percentage;
+  opencr_sensor_states_[12] = battery.design_capacity;
+  opencr_sensor_states_[13] = battery.present;
+
+  RCLCPP_INFO_ONCE(logger, "LW Pos: %f Vel: %f <<>> RW Pos: %f Vel: %f ", dxl_positions_[0], dxl_velocities_[0], dxl_positions_[1], dxl_velocities_[1]);
 
   return hardware_interface::return_type::OK;
 }

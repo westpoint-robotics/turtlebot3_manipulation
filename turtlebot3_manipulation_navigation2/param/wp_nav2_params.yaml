@@ -439,7 +439,7 @@ docking_server:
       docking_threshold: 0.05
       staging_x_offset: -0.7
       use_external_detection_pose: true
-      use_battery_status: false # true
+      use_battery_status: true
       use_stall_detection: false # true
 
       external_detection_timeout: 1.0
