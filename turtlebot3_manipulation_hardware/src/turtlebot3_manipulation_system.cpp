@@ -19,6 +19,7 @@
 #include <cmath>
 #include <memory>
 #include <vector>
+#include <unistd.h>
 
 #include "hardware_interface/types/hardware_interface_type_values.hpp"
 #include "rclcpp/rclcpp.hpp"
@@ -44,6 +45,7 @@ hardware_interface::CallbackReturn TurtleBot3ManipulationSystemHardware::on_init
   usb_port_ = info_.hardware_parameters["opencr_usb_port"];
   baud_rate_ = stoi(info_.hardware_parameters["opencr_baud_rate"]);
   heartbeat_ = 0;
+  init_wheel_offsets_ = true;
 
   joints_acceleration_[0] = stoi(info_.hardware_parameters["dxl_joints_profile_acceleration"]);
   joints_acceleration_[1] = stoi(info_.hardware_parameters["dxl_joints_profile_acceleration"]);
@@ -228,10 +230,10 @@ hardware_interface::return_type TurtleBot3ManipulationSystemHardware::read(
   std::array<double, 2> wheel_positions = opencr_->get_wheel_positions();
   std::array<double, 2> wheel_velocities = opencr_->get_wheel_velocities();
 
-  dxl_positions_[0] = wheel_positions[opencr::wheels::LEFT];
+  dxl_positions_[0] = wheel_positions[opencr::wheels::LEFT] - dxl_wheel_offsets_[opencr::wheels::LEFT];
   dxl_velocities_[0] = wheel_velocities[opencr::wheels::LEFT];
 
-  dxl_positions_[1] = wheel_positions[opencr::wheels::RIGHT];
+  dxl_positions_[1] = wheel_positions[opencr::wheels::RIGHT] - dxl_wheel_offsets_[opencr::wheels::RIGHT];
   dxl_velocities_[1] = wheel_velocities[opencr::wheels::RIGHT];
 
   std::array<double, 4> joint_positions = opencr_->get_joint_positions();
@@ -280,7 +282,7 @@ hardware_interface::return_type TurtleBot3ManipulationSystemHardware::read(
   opencr_sensor_states_[12] = battery.design_capacity;
   opencr_sensor_states_[13] = battery.present;
 
-  RCLCPP_INFO_ONCE(logger, "LW Pos: %f Vel: %f <<>> RW Pos: %f Vel: %f ", dxl_positions_[0], dxl_velocities_[0], dxl_positions_[1], dxl_velocities_[1]);
+  RCLCPP_INFO(logger, "\n=>=>=>=>=>=> L,R Pos: %f, %f <<>> L,R Vel: %f, %f ", dxl_positions_[0], dxl_positions_[1], dxl_velocities_[0], dxl_velocities_[1]);
 
   return hardware_interface::return_type::OK;
 }
@@ -301,6 +303,13 @@ hardware_interface::return_type TurtleBot3ManipulationSystemHardware::write(
 
   if (opencr_->set_gripper_position(dxl_gripper_commands_[0]) == false) {
     RCLCPP_ERROR(logger, "Can't control gripper");
+  }
+ 
+  if (init_wheel_offsets_){
+    dxl_wheel_offsets_ = opencr_->get_wheel_positions(); // First time returns all zeros
+    dxl_wheel_offsets_ = opencr_->get_wheel_positions(); // Second time returns the offsets
+    init_wheel_offsets_ = false;
+    RCLCPP_INFO(logger, "=============\n============Wheel offsets l,r: %.3f, %.3f", dxl_wheel_offsets_[0],dxl_wheel_offsets_[1]);
   }
 
   return hardware_interface::return_type::OK;
