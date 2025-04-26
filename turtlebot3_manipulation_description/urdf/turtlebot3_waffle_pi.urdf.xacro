@@ -44,7 +44,7 @@ https://github.com/ROBOTIS-GIT/turtlebot3/blob/kinetic-devel/turtlebot3_descript
       <inertia ixx="8.7002718e-03" ixy="-4.7576583e-05" ixz="1.1160499e-04"
                iyy="8.6195418e-03" iyz="-3.5422299e-06"
                izz="1.4612727e-02" />
-    </inertial>07
+    </inertial>
   </link>
 
   <joint name="${prefix}wheel_left_joint" type="continuous">

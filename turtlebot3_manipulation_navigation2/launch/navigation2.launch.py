@@ -87,7 +87,7 @@ def generate_launch_description():
     return LaunchDescription([
         DeclareLaunchArgument(
             'start_rviz',
-            default_value='True',
+            default_value='true',
             description='Whether execute rviz2'),
 
         DeclareLaunchArgument(
@@ -112,7 +112,7 @@ def generate_launch_description():
 
         DeclareLaunchArgument(
             'autostart',
-            default_value='True',
+            default_value='true',
             description='Automatically startup the nav2 stack'),
 
         DeclareLaunchArgument(

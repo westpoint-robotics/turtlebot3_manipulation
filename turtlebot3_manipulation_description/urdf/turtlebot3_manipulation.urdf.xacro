@@ -30,9 +30,9 @@
 
   <!-- Used for fixing OpenManipulator-X on TurtleBot3 Waffle Pi -->
   <joint name="$(arg prefix)base_fixed" type="fixed">
-    <parent link="$(arg prefix)base_link" />
-    <child link="$(arg prefix)link1" />
-    <origin xyz="-0.092 0.0 0.091" rpy="0 0 0" />
+    <parent link="$(arg prefix)base_link"/>
+    <child link="$(arg prefix)link1"/>
+    <origin xyz="-0.092 0.0 0.091" rpy="0 0 0"/>
   </joint>
 
   <xacro:open_manipulator_x prefix="$(arg prefix)" />
@@ -41,16 +41,13 @@
   <xacro:turtlebot3_manipulation_system
     name="TurtleBot3ManipulationSystem" prefix="$(arg prefix)" use_sim="$(arg use_sim)"
     use_fake_hardware="$(arg use_fake_hardware)"
-    fake_sensor_commands="$(arg fake_sensor_commands)" />
+    fake_sensor_commands="$(arg fake_sensor_commands)"/>
 
   <gazebo>
     <plugin filename="gz_ros2_control-system" name="gz_ros2_control::GazeboSimROS2ControlPlugin">
       <robot_param>robot_description</robot_param>
       <robot_param_node>robot_state_publisher</robot_param_node>
       <parameters>$(find turtlebot3_manipulation_bringup)/config/hardware_controller_manager.yaml</parameters>
-      <!-- <ros>
-      <remapping>/diff_drive_controller/cmd_vel:=/cmd_vel</remapping>
-      </ros> -->
     </plugin>
   </gazebo>
 
