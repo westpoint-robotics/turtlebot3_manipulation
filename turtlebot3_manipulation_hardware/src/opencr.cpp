@@ -199,7 +199,6 @@ std::array<double, 2> OpenCR::get_wheel_positions()
     (ticks[opencr::wheels::RIGHT] - last_ticks[opencr::wheels::RIGHT]);
 
   last_ticks = ticks;
-  std::cout << "\n******** l,r position: " << positions[opencr::wheels::LEFT] << ", " << positions[opencr::wheels::RIGHT] << std::endl;
 
   return positions;
 }

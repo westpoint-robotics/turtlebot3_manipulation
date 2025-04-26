@@ -282,8 +282,6 @@ hardware_interface::return_type TurtleBot3ManipulationSystemHardware::read(
   opencr_sensor_states_[12] = battery.design_capacity;
   opencr_sensor_states_[13] = battery.present;
 
-  RCLCPP_INFO(logger, "\n=>=>=>=>=>=> L,R Pos: %f, %f <<>> L,R Vel: %f, %f ", dxl_positions_[0], dxl_positions_[1], dxl_velocities_[0], dxl_velocities_[1]);
-
   return hardware_interface::return_type::OK;
 }
 
