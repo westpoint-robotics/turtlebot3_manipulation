@@ -290,8 +290,7 @@ hardware_interface::return_type TurtleBot3ManipulationSystemHardware::write(
   }
  
   if (init_wheel_offsets_){
-    dxl_wheel_offsets_ = opencr_->get_wheel_positions(); // First time returns all zeros
-    dxl_wheel_offsets_ = opencr_->get_wheel_positions(); // Second time returns the offsets
+    dxl_wheel_offsets_ = opencr_->get_wheel_positions();
     init_wheel_offsets_ = false;
   }
 
