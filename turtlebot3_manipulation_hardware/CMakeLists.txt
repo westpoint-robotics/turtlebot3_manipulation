@@ -13,6 +13,8 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra)
 endif()
 
+add_compile_options(-Wno-deprecated-declarations)
+
 ################################################################################
 # Find ament packages and libraries for ament and system dependencies
 ################################################################################
