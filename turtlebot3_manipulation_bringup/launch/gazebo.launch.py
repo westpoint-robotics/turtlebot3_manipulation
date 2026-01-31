@@ -52,7 +52,6 @@ def generate_launch_description():
     desc_urdf_dir = os.path.join(get_package_share_directory('turtlebot3_manipulation_description'), 'urdf')
     # print(f'\n\t bringup_world_dir: {bringup_world_dir}\n\t desc_mesh_dir: {desc_mesh_dir}\n\t desc_urdf_dir: {desc_urdf_dir}\n')
 
-
     start_rviz = LaunchConfiguration('start_rviz')
     prefix = LaunchConfiguration('prefix')
     use_sim_time = LaunchConfiguration('use_sim_time')
