@@ -196,7 +196,8 @@ def generate_launch_description():
             condition=IfCondition(use_joy),
             launch_arguments={'config_filepath': joy_configs,
                           'joy_dev': '0',
-                          'joy_vel': 'cmd_vel_joy',
+                        #   'joy_vel': 'cmd_vel_joy',
+                          'joy_vel': 'cmd_vel',
                           'use_sim': use_sim_time,
                           'publish_stamped_twist': 'true',}.items()),        
 
