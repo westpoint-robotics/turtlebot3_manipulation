@@ -160,6 +160,7 @@ def generate_launch_description():
             default_value='True',
             description='Whether to start joystick control nodes'),
 
+        # If selected then start RVIZ
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource([ThisLaunchFileDir(), '/base.launch.py']),
             launch_arguments={
@@ -169,6 +170,7 @@ def generate_launch_description():
             }.items(),
         ),
 
+        # Start Gazebosim server
         IncludeLaunchDescription(PythonLaunchDescriptionSource([
             PathJoinSubstitution([FindPackageShare('ros_gz_sim'),
                     'launch',
@@ -177,6 +179,7 @@ def generate_launch_description():
             launch_arguments={'gz_args': ['-r -s -v1 ', world]}.items(),
         ),
             
+        # Start Gazebosim client
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(
                 os.path.join(get_package_share_directory('ros_gz_sim'),
@@ -186,6 +189,7 @@ def generate_launch_description():
             launch_arguments={'gz_args': ['-g ']}.items(),
         ),
 
+        # Start robot teleop and if joystick selected enable joystick control
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(
                 os.path.join(get_package_share_directory('teleop_twist_joy'),
@@ -197,9 +201,10 @@ def generate_launch_description():
                           'joy_dev': '0',
                         #   'joy_vel': 'cmd_vel_joy',
                           'joy_vel': 'cmd_vel',
-                          'use_sim': use_sim_time,
+                          'use_sim_time': use_sim_time,
                           'publish_stamped_twist': 'true',}.items()),        
 
+        # Map Gazebo topics into ROS2
         Node(
             package='ros_gz_bridge',
             executable='parameter_bridge',
@@ -212,6 +217,7 @@ def generate_launch_description():
             output='screen',
         ),        
 
+        # Bring Gazebo camera output into ROS2
         Node(
             package='ros_gz_image',
             executable='image_bridge',
@@ -224,18 +230,7 @@ def generate_launch_description():
             arguments=['/image_raw']
         ),
 
-        # Node(
-        #     package='ros_gz_image',
-        #     executable='image_bridge',
-        #     name='bridge_gz_ros_camera_depth',
-        #     namespace=namespace,
-        #     output='screen',
-        #     parameters=[{
-        #         'use_sim_time': use_sim_time,
-        #     }],
-        #     arguments=['/rgbd_camera/depth_image']
-        # ),
-
+        # Spawn the TurtleBot3
         Node(
             package='ros_gz_sim',
             executable='create',
