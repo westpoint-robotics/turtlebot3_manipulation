@@ -58,12 +58,12 @@ def generate_launch_description():
 
     namespace = LaunchConfiguration('namespace')
     robot_name = LaunchConfiguration('robot_name')
-    use_joy = LaunchConfiguration('use_joy')
-    joy_configs = PathJoinSubstitution([
-            FindPackageShare('turtlebot3_manipulation_bringup'),
-            'config',
-            'xbox.config.yaml',
-        ])
+    # use_joy = LaunchConfiguration('use_joy')
+    # joy_configs = PathJoinSubstitution([
+    #         FindPackageShare('turtlebot3_manipulation_bringup'),
+    #         'config',
+    #         'xbox.config.yaml',
+    #     ])
 
     ros_gz_bridge_config = PathJoinSubstitution([
             FindPackageShare('turtlebot3_manipulation_bringup'),
@@ -155,10 +155,10 @@ def generate_launch_description():
             default_value='turtlebot3',
             description='name of the robot'),
             
-        DeclareLaunchArgument(
-            'use_joy',
-            default_value='True',
-            description='Whether to start joystick control nodes'),
+        # DeclareLaunchArgument(
+        #     'use_joy',
+        #     default_value='True',
+        #     description='Whether to start joystick control nodes'),
 
         # If selected then start RVIZ
         IncludeLaunchDescription(
@@ -187,22 +187,7 @@ def generate_launch_description():
                             'gz_sim.launch.py')
             ),
             launch_arguments={'gz_args': ['-g ']}.items(),
-        ),
-
-        # Start robot teleop and if joystick selected enable joystick control
-        IncludeLaunchDescription(
-            PythonLaunchDescriptionSource(
-                os.path.join(get_package_share_directory('teleop_twist_joy'),
-                         'launch',
-                         'teleop-launch.py')
-            ),
-            condition=IfCondition(use_joy),
-            launch_arguments={'config_filepath': joy_configs,
-                          'joy_dev': '0',
-                        #   'joy_vel': 'cmd_vel_joy',
-                          'joy_vel': 'cmd_vel',
-                          'use_sim_time': use_sim_time,
-                          'publish_stamped_twist': 'true',}.items()),        
+        ),     
 
         # Map Gazebo topics into ROS2
         Node(

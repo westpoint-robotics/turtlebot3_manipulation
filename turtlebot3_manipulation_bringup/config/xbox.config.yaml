@@ -17,11 +17,16 @@ teleop_twist_joy_node:
     enable_turbo_button: 5  # Right trigger button
 
     qos_overrides:
-      /cmd_vel:
+      /joy:
+        subscription:
+          reliability: best_effort
+          depth: 1
+          durability: volatile
+      /cmd_vel_teleop:
         publisher:
           reliability: best_effort
-          history: keep_last
-          depth: 1    
+          depth: 1
+          durability: volatile
 
 gz_ros_control:
   ros__parameters:
@@ -34,3 +39,9 @@ rviz2:
 joy_node:
   ros__parameters:
     use_sim_time: True
+    qos_overrides:
+      /joy:
+        subscription:
+          reliability: best_effort
+          depth: 1
+          durability: volatile

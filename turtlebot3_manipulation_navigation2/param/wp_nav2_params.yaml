@@ -41,6 +41,8 @@ amcl:
 
 bt_navigator:
   ros__parameters:
+    enable_groot_monitoring: True
+    groot_server_port: 1669
     enable_stamped_cmd_vel: true
     use_sim_time: False
     global_frame: map

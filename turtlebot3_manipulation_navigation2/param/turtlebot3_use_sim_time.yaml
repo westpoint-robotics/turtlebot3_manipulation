@@ -41,6 +41,8 @@ amcl:
 
 bt_navigator:
   ros__parameters:
+    enable_groot_monitoring: True
+    groot_server_port: 1665
     use_sim_time: True
     global_frame: map
     robot_base_frame: base_footprint

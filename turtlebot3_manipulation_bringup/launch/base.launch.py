@@ -26,13 +26,26 @@ from launch.substitutions import Command
 from launch.substitutions import FindExecutable
 from launch.substitutions import LaunchConfiguration
 from launch.substitutions import PathJoinSubstitution
+from launch.launch_description_sources import PythonLaunchDescriptionSource
+from launch.substitutions import ThisLaunchFileDir
+from launch.actions import IncludeLaunchDescription
+
 
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
 
 
 def generate_launch_description():
+
     declared_arguments = []
+
+    declared_arguments.append(            
+        DeclareLaunchArgument(
+            'use_joy',
+            default_value='True',
+            description='Whether to start joystick control nodes'),
+    )
+
     declared_arguments.append(
         DeclareLaunchArgument(
             'start_rviz',
@@ -40,6 +53,7 @@ def generate_launch_description():
             description='Whether execute rviz2'
         )
     )
+
 
     declared_arguments.append(
         DeclareLaunchArgument(
@@ -74,6 +88,7 @@ def generate_launch_description():
         )
     )
 
+    use_joy = LaunchConfiguration('use_joy')
     start_rviz = LaunchConfiguration('start_rviz')
     prefix = LaunchConfiguration('prefix')
     use_sim = LaunchConfiguration('use_sim')
@@ -119,6 +134,14 @@ def generate_launch_description():
             FindPackageShare('turtlebot3_manipulation_bringup'),
             'rviz',
             'turtlebot3_manipulation.rviz'
+        ]
+    )
+
+    joy_config_file = PathJoinSubstitution(
+        [
+            FindPackageShare('turtlebot3_manipulation_bringup'),
+            'config',
+            'xbox.config.yaml'
         ]
     )
 
@@ -183,6 +206,18 @@ def generate_launch_description():
         output='screen',
     )
 
+
+    # Start robot teleop and if joystick selected enable joystick control
+    teleop = IncludeLaunchDescription(PythonLaunchDescriptionSource(
+        [ThisLaunchFileDir(), '/teleop.launch.py']),
+        condition=IfCondition(use_joy),
+        launch_arguments={'config_filepath': joy_config_file,
+                        'joy_dev': '0',
+                        'joy_vel': 'cmd_vel_teleop',
+                    #   'joy_vel': 'cmd_vel',
+                        'use_sim_time': use_sim,
+                        'publish_stamped_twist': 'true',}.items())   
+
     delay_rviz_after_joint_state_broadcaster_spawner = RegisterEventHandler(
         event_handler=OnProcessExit(
             target_action=joint_state_broadcaster_spawner,
@@ -222,6 +257,14 @@ def generate_launch_description():
             )
         )
 
+    # delay_telop_after_joint_state_broadcaster_spawner = \
+    #     RegisterEventHandler(
+    #         event_handler=OnProcessExit(
+    #             target_action=diff_drive_controller_spawner,
+    #             on_exit=[teleop],
+    #         )
+    #     )
+
     nodes = [
         control_node,
         robot_state_pub_node,
@@ -231,6 +274,7 @@ def generate_launch_description():
         delay_imu_broadcaster_spawner_after_joint_state_broadcaster_spawner,
         delay_arm_controller_spawner_after_joint_state_broadcaster_spawner,
         delay_gripper_controller_spawner_after_joint_state_broadcaster_spawner,
+        teleop,
     ]
 
     return LaunchDescription(declared_arguments + nodes)
