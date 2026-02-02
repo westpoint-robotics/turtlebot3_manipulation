@@ -80,7 +80,7 @@ def generate_launch_description():
         Node(
             package='cartographer_ros',
             executable='cartographer_node',
-            output='screen',
+            output='log',
             parameters=[{'use_sim_time': use_sim_time}],
             arguments=['-configuration_directory', cartographer_config_dir,
                        '-configuration_basename', configuration_basename]),
@@ -88,7 +88,7 @@ def generate_launch_description():
         Node(
             package='cartographer_ros',
             executable='cartographer_occupancy_grid_node',
-            output='screen',
+            output='log',
             parameters=[{'use_sim_time': use_sim_time}],
             arguments=['-resolution', resolution]),
 
@@ -96,6 +96,6 @@ def generate_launch_description():
             package='rviz2',
             executable='rviz2',
             arguments=['-d', rviz_config_file],
-            output='screen',
+            output='log',
             condition=IfCondition(start_rviz)),
     ])

@@ -47,7 +47,7 @@ def generate_launch_description():
         package="robot_state_publisher",
         executable="robot_state_publisher",
         respawn=True,
-        output="screen",
+        output="log",
         parameters=[{"publish_frequency": publish_frequency}, robot_description]
     )
 

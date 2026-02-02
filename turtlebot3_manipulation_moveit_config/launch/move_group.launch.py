@@ -135,7 +135,7 @@ def generate_launch_description():
     move_group_node = Node(
         package="moveit_ros_move_group",
         executable="move_group",
-        output="screen",
+        output="log",
         parameters=[
             robot_description,
             robot_description_semantic,

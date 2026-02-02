@@ -34,7 +34,7 @@ def generate_launch_description():
             ExecuteProcess(
                 cmd=["ros2 run controller_manager spawner.py {}".format(controller)],
                 shell=True,
-                output="screen",
+                arguments=['--ros-args, --log-level, WARN'],
             )
         ]
     ld.add_action(load_controllers)

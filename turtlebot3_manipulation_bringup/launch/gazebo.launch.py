@@ -154,11 +154,6 @@ def generate_launch_description():
             'robot_name',
             default_value='turtlebot3',
             description='name of the robot'),
-            
-        # DeclareLaunchArgument(
-        #     'use_joy',
-        #     default_value='True',
-        #     description='Whether to start joystick control nodes'),
 
         # If selected then start RVIZ
         IncludeLaunchDescription(
@@ -187,7 +182,7 @@ def generate_launch_description():
                             'gz_sim.launch.py')
             ),
             launch_arguments={'gz_args': ['-g ']}.items(),
-        ),     
+        ),
 
         # Map Gazebo topics into ROS2
         Node(
@@ -199,7 +194,7 @@ def generate_launch_description():
                     'config_file': ros_gz_bridge_config,
                     'use_sim_time': use_sim_time,
             }],
-            output='screen',
+            output='log',
         ),        
 
         # Bring Gazebo camera output into ROS2
@@ -208,7 +203,7 @@ def generate_launch_description():
             executable='image_bridge',
             name='bridge_gz_ros_camera_image',
             namespace=namespace,
-            output='screen',
+            output='log',
             parameters=[{
                 'use_sim_time': use_sim_time,
             }],
@@ -220,7 +215,7 @@ def generate_launch_description():
             package='ros_gz_sim',
             executable='create',
             namespace=namespace,
-            output='screen',
+            output='log',
             arguments=[
                 '-name', robot_name,
                 '-topic', 'robot_description',

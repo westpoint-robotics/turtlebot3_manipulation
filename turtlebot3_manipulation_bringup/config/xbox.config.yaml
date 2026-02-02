@@ -16,17 +16,24 @@ teleop_twist_joy_node:
     enable_button: 4  # Left trigger button
     enable_turbo_button: 5  # Right trigger button
 
-    qos_overrides:
-      /joy:
-        subscription:
-          reliability: best_effort
-          depth: 1
-          durability: volatile
-      /cmd_vel_teleop:
-        publisher:
-          reliability: best_effort
-          depth: 1
-          durability: volatile
+twist_mux:
+  ros__parameters:
+    use_stamped: true
+    use_sim_time: true
+    topics:
+      navigation:
+        topic   : cmd_vel_smoothed
+        timeout : 0.5
+        priority: 10
+      behavior_tree:
+        topic   : cmd_vel_dock
+        timeout : 0.5
+        priority: 50
+      joystick:
+        topic   : cmd_vel_teleop
+        timeout : 0.5
+        priority: 100
+
 
 gz_ros_control:
   ros__parameters:
@@ -39,9 +46,3 @@ rviz2:
 joy_node:
   ros__parameters:
     use_sim_time: True
-    qos_overrides:
-      /joy:
-        subscription:
-          reliability: best_effort
-          depth: 1
-          durability: volatile

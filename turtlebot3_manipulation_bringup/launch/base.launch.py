@@ -159,51 +159,48 @@ def generate_launch_description():
         package='robot_state_publisher',
         executable='robot_state_publisher',
         parameters=[{'robot_description': urdf_file, 'use_sim_time': use_sim}],
-        output='screen'
+        arguments=['--ros-args', '--log-level', 'INFO'],
     )
 
     rviz_node = Node(
         package='rviz2',
         executable='rviz2',
-        arguments=['-d', rviz_config_file],
+        arguments=['-d', rviz_config_file, '--ros-args', '--log-level', 'INFO'],
         parameters=[{'use_sim_time': use_sim}],
-        output='screen',
         condition=IfCondition(start_rviz)
     )
 
     joint_state_broadcaster_spawner = Node(
         package='controller_manager',
         executable='spawner',
-        arguments=['joint_state_broadcaster', '--controller-manager', '/controller_manager'],
-        output='screen',
+        arguments=['joint_state_broadcaster', '--controller-manager', '/controller_manager', 
+                   '--ros-args', '--log-level', 'INFO'],
     )
 
     diff_drive_controller_spawner = Node(
         package='controller_manager',
         executable='spawner',
         arguments=['diff_drive_controller', '-c', '/controller_manager',
-          "--controller-ros-args", "-r diff_drive_controller/cmd_vel:=cmd_vel -r diff_drive_controller/odom:=odom",],        
-        output='screen',)
+          "--controller-ros-args", "-r diff_drive_controller/cmd_vel:=cmd_vel -r diff_drive_controller/odom:=odom",
+          '--ros-args', '--log-level', 'INFO'],       
+        output='log',)
 
     imu_broadcaster_spawner = Node(
         package='controller_manager',
         executable='spawner',
-        arguments=['imu_broadcaster'],
-        output='screen',
+        arguments=['imu_broadcaster', '--ros-args', '--log-level', 'INFO'],
     )
 
     arm_controller_spawner = Node(
         package='controller_manager',
         executable='spawner',
-        arguments=['arm_controller'],
-        output='screen',
+        arguments=['arm_controller', '--ros-args', '--log-level', 'INFO'],
     )
 
     gripper_controller_spawner = Node(
         package='controller_manager',
         executable='spawner',
-        arguments=['gripper_controller'],
-        output='screen',
+        arguments=['gripper_controller', '--ros-args', '--log-level', 'INFO'],
     )
 
 
@@ -256,14 +253,6 @@ def generate_launch_description():
                 on_exit=[gripper_controller_spawner],
             )
         )
-
-    # delay_telop_after_joint_state_broadcaster_spawner = \
-    #     RegisterEventHandler(
-    #         event_handler=OnProcessExit(
-    #             target_action=diff_drive_controller_spawner,
-    #             on_exit=[teleop],
-    #         )
-    #     )
 
     nodes = [
         control_node,
