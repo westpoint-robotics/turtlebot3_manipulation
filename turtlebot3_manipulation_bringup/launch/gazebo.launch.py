@@ -58,12 +58,6 @@ def generate_launch_description():
 
     namespace = LaunchConfiguration('namespace')
     robot_name = LaunchConfiguration('robot_name')
-    # use_joy = LaunchConfiguration('use_joy')
-    # joy_configs = PathJoinSubstitution([
-    #         FindPackageShare('turtlebot3_manipulation_bringup'),
-    #         'config',
-    #         'xbox.config.yaml',
-    #     ])
 
     ros_gz_bridge_config = PathJoinSubstitution([
             FindPackageShare('turtlebot3_manipulation_bringup'),

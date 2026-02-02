@@ -38,6 +38,13 @@
       <real_time_factor>1.0</real_time_factor>
     </physics>
 
+   <scene>
+      <ambient>1 1 1 1</ambient>
+      <background>0.3 0.7 0.9 1</background>
+      <shadows>0</shadows>
+      <grid>false</grid>
+    </scene>
+
     <plugin
       filename="gz-sim-physics-system"
       name="gz::sim::systems::Physics">
@@ -59,14 +66,6 @@
       filename="gz-sim-imu-system"
       name="gz::sim::systems::Imu">
     </plugin>
-
-   <scene>
-      <ambient>1 1 1 1</ambient>
-      <background>0.3 0.7 0.9 1</background>
-      <shadows>0</shadows>
-      <grid>false</grid>
-    </scene>
-
 
     <!-- Load models -->
     <include>
