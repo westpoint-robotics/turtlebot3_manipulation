@@ -19,7 +19,7 @@
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
 from launch.actions import IncludeLaunchDescription
-from launch.conditions import IfCondition
+from launch.conditions import IfCondition, UnlessCondition
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration
 from launch.substitutions import PathJoinSubstitution
@@ -31,13 +31,13 @@ from launch_ros.substitutions import FindPackageShare
 def generate_launch_description():
     start_rviz = LaunchConfiguration('start_rviz')
     use_sim = LaunchConfiguration('use_sim')
-    slam = LaunchConfiguration('slam')
     map_yaml_file = LaunchConfiguration('map_yaml_file')
     params_file = LaunchConfiguration('params_file')
     default_bt_xml_filename = LaunchConfiguration('default_bt_xml_filename')
     autostart = LaunchConfiguration('autostart')
     use_composition = LaunchConfiguration('use_composition')
     use_respawn = LaunchConfiguration('use_respawn')
+    slam = LaunchConfiguration('slam')
 
     map_yaml_file = LaunchConfiguration(
         'map_yaml_file',
@@ -45,7 +45,7 @@ def generate_launch_description():
             [
                 FindPackageShare('turtlebot3_manipulation_navigation2'),
                 'map',
-                'ee484_maze04.yaml'
+                'small_building.yaml'
             ]
         )
     )
@@ -58,7 +58,18 @@ def generate_launch_description():
                 'param',
                 'wp_nav2_params.yaml'
             ]
-        )
+        ),
+    )
+
+    params_file_sim = LaunchConfiguration(
+        'params_file_sim',
+        default=PathJoinSubstitution(
+            [
+                FindPackageShare('turtlebot3_manipulation_navigation2'),
+                'param',
+                'wp_nav2_params_sim.yaml'
+            ]
+        ),
     )
 
     nav2_launch_file_dir = PathJoinSubstitution(
@@ -92,7 +103,7 @@ def generate_launch_description():
 
         DeclareLaunchArgument(
             'use_sim',
-            default_value='false',
+            default_value='true',
             description='Start robot in Gazebo simulation'),
 
         DeclareLaunchArgument(
@@ -102,8 +113,15 @@ def generate_launch_description():
 
         DeclareLaunchArgument(
             'params_file',
+            default_value=params_file_sim,
+            description='Full path to the ROS2 parameters file to use for all launched nodes',
+            condition=IfCondition(use_sim)),
+
+        DeclareLaunchArgument(
+            'params_file',
             default_value=params_file,
-            description='Full path to the ROS2 parameters file to use for all launched nodes'),
+            description='Full path to the ROS2 parameters file to use for all launched nodes',
+            condition=UnlessCondition(use_sim)),
 
         DeclareLaunchArgument(
             'default_bt_xml_filename',
@@ -127,21 +145,19 @@ def generate_launch_description():
                 Applied when composition is disabled.'),
 
         DeclareLaunchArgument(
-            'slam',
-            default_value='True',
-            description='Use SLAM'), 
+            'slam', default_value='True', description='Whether to run a SLAM'),
 
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource([nav2_launch_file_dir, '/bringup_launch.py']),
             launch_arguments={
                 'map': map_yaml_file,
                 'use_sim_time': use_sim,
-                'slam': slam,
                 'params_file': params_file,
                 'default_bt_xml_filename': default_bt_xml_filename,
                 'autostart': autostart,
                 'use_composition': use_composition,
                 'use_respawn': use_respawn,
+                'slam': slam,
             }.items(),
         ),
 
