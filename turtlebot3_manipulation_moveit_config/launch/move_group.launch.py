@@ -29,7 +29,7 @@ import os
 
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument
+from launch.actions import DeclareLaunchArgument, LogInfo
 from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
 import xacro
@@ -67,20 +67,20 @@ def generate_launch_description():
         'kinematics.yaml',
     )
     with open(kinematics_yaml_path, 'r') as file:
-        kinematics_yaml = yaml.safe_load(file)
+        kinematics_yaml = yaml.safe_load(file)    
 
     # Planning Functionality
     # Planning Functionality
     ompl_planning_pipeline_config = {
         'move_group': {
             'planning_plugin': 'ompl_interface/OMPLPlanner',
-            'request_adapters': (
-                'default_planner_request_adapters/AddTimeOptimalParameterization '
-                'default_planner_request_adapters/FixWorkspaceBounds '
-                'default_planner_request_adapters/FixStartStateBounds '
-                'default_planner_request_adapters/FixStartStateCollision '
+            'request_adapters': [
+                'default_planner_request_adapters/AddTimeOptimalParameterization',
+                'default_planner_request_adapters/FixWorkspaceBounds',
+                'default_planner_request_adapters/FixStartStateBounds',
+                'default_planner_request_adapters/FixStartStateCollision', 
                 'default_planner_request_adapters/FixStartStatePathConstraints'
-            ),
+            ],
             'start_state_max_bounds_error': 0.1,
         }
     }
@@ -130,7 +130,7 @@ def generate_launch_description():
     use_sim = LaunchConfiguration('use_sim')
     declare_use_sim = DeclareLaunchArgument(
         'use_sim',
-        default_value='true',
+        default_value='false',
         description='Start robot in Gazebo simulation.')
     ld.add_action(declare_use_sim)
 
@@ -151,5 +151,8 @@ def generate_launch_description():
     )
 
     ld.add_action(move_group_node)
+
+    log_action = LogInfo(msg=[f'KNMTCS: The value of my_variable is: {kinematics_yaml}'])
+    ld.add_action(log_action)
 
     return ld

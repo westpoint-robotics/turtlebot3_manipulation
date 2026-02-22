@@ -32,10 +32,10 @@ def generate_launch_description():
             'turtlebot3_manipulation_moveit_config'), 'launch')
 
     # RViz
-    rviz_launch = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource([launch_dir, '/moveit_rviz.launch.py'])
-    )
-    ld.add_action(rviz_launch)
+    # rviz_launch = IncludeLaunchDescription(
+    #     PythonLaunchDescriptionSource([launch_dir, '/moveit_rviz.launch.py'])
+    # )
+    # ld.add_action(rviz_launch)
 
     # move_group
     move_group_launch = IncludeLaunchDescription(
