@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<sdf version="1.5">
+  <model name="small_building">
+    <pose>-10.5 -5.0 0 0 0 0</pose>
+    <static>true</static>
+    <link name="exterior_link">
+      <collision name="base">
+        <geometry>
+          <mesh>
+            <uri>model://small_building/meshes/Small_BuildingV3_exterior.dae</uri>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model://small_building/meshes/Small_BuildingV3_exterior.dae</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+
+    <link name="interior_link">
+      <collision name="base">
+        <geometry>
+          <mesh>
+            <uri>model://small_building/meshes/Small_BuildingV3_interior.dae</uri>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model://small_building/meshes/Small_BuildingV3_interior.dae</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+  </model>
+</sdf>

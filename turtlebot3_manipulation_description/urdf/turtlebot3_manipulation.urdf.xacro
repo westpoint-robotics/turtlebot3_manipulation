@@ -44,8 +44,10 @@
     fake_sensor_commands="$(arg fake_sensor_commands)"/>
 
   <gazebo>
-    <plugin name="gazebo_ros2_control" filename="libgazebo_ros2_control.so">
-      <parameters>$(find turtlebot3_manipulation_bringup)/config/gazebo_controller_manager.yaml</parameters>
+    <plugin filename="gz_ros2_control-system" name="gz_ros2_control::GazeboSimROS2ControlPlugin">
+      <robot_param>robot_description</robot_param>
+      <robot_param_node>robot_state_publisher</robot_param_node>
+      <parameters>$(find turtlebot3_manipulation_bringup)/config/hardware_controller_manager.yaml</parameters>
     </plugin>
   </gazebo>
 
