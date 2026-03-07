@@ -26,6 +26,8 @@ from launch.substitutions import LaunchConfiguration
 from launch.substitutions import PathJoinSubstitution
 from launch.substitutions import ThisLaunchFileDir
 from launch_ros.substitutions import FindPackageShare
+from launch.conditions import IfCondition
+
 
 
 def generate_launch_description():
@@ -51,6 +53,7 @@ def generate_launch_description():
     start_rviz = LaunchConfiguration('start_rviz')
     prefix = LaunchConfiguration('prefix')
     use_fake_hardware = LaunchConfiguration('use_fake_hardware')
+    use_joystick = LaunchConfiguration('use_joystick')
 
     return LaunchDescription([
         DeclareLaunchArgument(
@@ -68,6 +71,12 @@ def generate_launch_description():
             default_value='false',
             description='Start robot with fake hardware mirroring command to its states.'),
 
+        DeclareLaunchArgument(
+            'use_joystick',
+            default_value='false',
+            description='Launch Joystick nodes.'
+        ),
+
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource([ThisLaunchFileDir(), '/base.launch.py']),
             launch_arguments={
@@ -75,6 +84,16 @@ def generate_launch_description():
                 'prefix': prefix,
                 'use_fake_hardware': use_fake_hardware,
             }.items(),
+        ),
+
+        IncludeLaunchDescription(
+            PythonLaunchDescriptionSource([ThisLaunchFileDir(), '/joystick.launch.py']),
+            launch_arguments={
+                'start_rviz': start_rviz,
+                'prefix': prefix,
+                'use_fake_hardware': use_fake_hardware,
+            }.items(),
+            condition=IfCondition(use_joystick),
         ),
 
         IncludeLaunchDescription(
