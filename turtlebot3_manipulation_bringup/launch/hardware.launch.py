@@ -27,6 +27,7 @@ from launch.substitutions import PathJoinSubstitution
 from launch.substitutions import ThisLaunchFileDir
 from launch_ros.substitutions import FindPackageShare
 from launch.conditions import IfCondition
+from launch_ros.actions import Node
 
 
 
@@ -54,6 +55,8 @@ def generate_launch_description():
     prefix = LaunchConfiguration('prefix')
     use_fake_hardware = LaunchConfiguration('use_fake_hardware')
     use_joystick = LaunchConfiguration('use_joystick')
+    use_usbcam = LaunchConfiguration('use_usbcam')
+    video_device = LaunchConfiguration('video_device')
 
     return LaunchDescription([
         DeclareLaunchArgument(
@@ -75,6 +78,18 @@ def generate_launch_description():
             'use_joystick',
             default_value='false',
             description='Launch Joystick nodes.'
+        ),
+
+        DeclareLaunchArgument(
+            'video_device',
+            default_value='/dev/usbcam',
+            description='Secify the USB Camera device path.'
+        ),
+
+        DeclareLaunchArgument(
+            'use_usbcam',
+            default_value='false',
+            description='Start the USB Camera node.'
         ),
 
         IncludeLaunchDescription(
@@ -107,4 +122,14 @@ def generate_launch_description():
                 'frame_id': 'base_scan',
             }.items(),
         ),
+
+        Node(
+            package='usb_cam',
+            executable='usb_cam_node_exe',
+            parameters=[{'video_device': video_device},],
+            output='screen',
+            condition=IfCondition(use_usbcam),
+        ),
+
+
     ])
