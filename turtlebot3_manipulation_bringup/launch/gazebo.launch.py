@@ -100,7 +100,7 @@ def generate_launch_description():
             description='Prefix of the joint and link names'),
 
         DeclareLaunchArgument(
-            'use_sim',
+            'use_sim_time',
             default_value='true',
             description='Start robot in Gazebo simulation.'),
 
@@ -155,7 +155,7 @@ def generate_launch_description():
             launch_arguments={
                 'start_rviz': start_rviz,
                 'prefix': prefix,
-                'use_sim': use_sim,
+                'use_sim': use_sim_time,
             }.items(),
         ),
 
