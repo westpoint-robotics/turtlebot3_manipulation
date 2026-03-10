@@ -6,13 +6,14 @@ https://github.com/ros-controls/ros2_control_demos/blob/foxy/ros2_control_demo_d
 -->
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
 
-  <xacro:macro name="turtlebot3_manipulation_system" params="name prefix use_sim:=^|false use_fake_hardware:=^|false fake_sensor_commands:=^|false">
+  <xacro:macro name="turtlebot3_manipulation_system"
+    params="name prefix use_sim:=^|false use_fake_hardware:=^|false fake_sensor_commands:=^|false">
 
     <ros2_control name="${name}" type="system">
 
       <xacro:if value="$(arg use_sim)">
         <hardware>
-          <plugin>gazebo_ros2_control/GazeboSystem</plugin>
+          <plugin>gz_ros2_control/GazeboSimSystem</plugin>
         </hardware>
       </xacro:if>
       <xacro:unless value="$(arg use_sim)">
