@@ -157,10 +157,10 @@ def generate_launch_description():
     diff_drive_controller_spawner = Node(
         package='controller_manager',
         executable='spawner',
-        arguments=['diff_drive_controller', '-c', '/controller_manager'],
-        output='screen',
-        condition=UnlessCondition(use_sim)
-    )
+        arguments=['diff_drive_controller', '-c', '/controller_manager',
+          "--controller-ros-args", "-r diff_drive_controller/cmd_vel:=cmd_vel -r diff_drive_controller/odom:=odom",
+          '--ros-args', '--log-level', 'INFO'],       
+        output='log',)
 
     imu_broadcaster_spawner = Node(
         package='controller_manager',
