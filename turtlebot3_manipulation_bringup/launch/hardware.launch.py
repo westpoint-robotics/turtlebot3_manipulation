@@ -103,11 +103,7 @@ def generate_launch_description():
 
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource([ThisLaunchFileDir(), '/joystick.launch.py']),
-            launch_arguments={
-                'start_rviz': start_rviz,
-                'prefix': prefix,
-                'use_fake_hardware': use_fake_hardware,
-            }.items(),
+            launch_arguments={'prefix': prefix,}.items(),
             condition=IfCondition(use_joystick),
         ),
 
