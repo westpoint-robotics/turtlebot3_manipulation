@@ -21,6 +21,7 @@ from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
 from launch.actions import IncludeLaunchDescription
+from launch_ros.actions import Node
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration
 from launch.substitutions import PathJoinSubstitution
@@ -35,6 +36,11 @@ def generate_launch_description():
             'config',
             'xbox.config.yaml',
         ])
+    twist_mux_configs = PathJoinSubstitution([
+            FindPackageShare('turtlebot3_manipulation_bringup'),
+            'config',
+            'twist_mux.yaml',
+        ])
 
     return LaunchDescription([
 
@@ -42,6 +48,12 @@ def generate_launch_description():
             'use_sim_time',
             default_value='false',
             description='Start robot in Gazebo simulation.'),
+
+        DeclareLaunchArgument(
+            'twist_mux_configs',
+            default_value=twist_mux_configs,
+            description='Path to twist_mux configuration YAML file'
+        ),
 
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(
@@ -51,7 +63,21 @@ def generate_launch_description():
             ),
             launch_arguments={'config_filepath': joy_configs,
                           'joy_dev': '0',
-                          'joy_vel': 'diff_drive_controller/cmd_vel',
+                          'joy_vel': 'cmd_vel_teleop',
                           'use_sim': use_sim_time,
-                          'publish_stamped_twist': 'true',}.items()),        
+                          'publish_stamped_twist': 'true',}.items()),   
+        Node(
+            package='twist_mux',
+            executable='twist_mux',
+            name='twist_mux',
+            output='screen',
+            parameters=[
+                LaunchConfiguration('twist_mux_configs'),
+                {'use_sim_time': LaunchConfiguration('use_sim_time')}
+            ],
+            remappings=[
+            ('cmd_vel_out', '/cmd_vel'),],
+
+
+        )     
     ])

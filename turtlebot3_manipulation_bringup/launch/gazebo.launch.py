@@ -159,6 +159,11 @@ def generate_launch_description():
             }.items(),
         ),
 
+        IncludeLaunchDescription(
+            PythonLaunchDescriptionSource([ThisLaunchFileDir(), '/joystick.launch.py']),
+            launch_arguments={'prefix': prefix,}.items(),
+        ),
+
         # Start Gazebosim server
         IncludeLaunchDescription(PythonLaunchDescriptionSource([
             PathJoinSubstitution([FindPackageShare('ros_gz_sim'),
