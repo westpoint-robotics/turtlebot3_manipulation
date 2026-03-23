@@ -103,7 +103,7 @@ def generate_launch_description():
 
         DeclareLaunchArgument(
             'use_sim',
-            default_value='true',
+            default_value='false',
             description='Start robot in Gazebo simulation'),
 
         DeclareLaunchArgument(
