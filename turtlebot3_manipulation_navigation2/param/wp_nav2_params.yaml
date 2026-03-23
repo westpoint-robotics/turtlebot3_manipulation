@@ -492,7 +492,7 @@ loopback_simulator:
 slam_toolbox:
   ros__parameters:
     debug_logging: true
-    max_laser_range: 20.0
+    max_laser_range: 3.5
     use_sim_time: False
 
 sync_slam_toolbox_node:
