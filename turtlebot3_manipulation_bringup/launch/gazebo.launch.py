@@ -17,6 +17,7 @@
 # Author: Darby Lim
 
 import os
+import time
 
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
@@ -44,6 +45,9 @@ def generate_launch_description():
     if not is_valid_to_launch():
         print('Can not launch fake robot in Raspberry Pi')
         return LaunchDescription([])
+    
+    current_unix_time = time.mktime(time.localtime())
+
 
     # Add the package resources to GZ environmental variables
     bringup_world_dir = os.path.join(get_package_share_directory('turtlebot3_manipulation_bringup'), 'worlds')
@@ -170,7 +174,7 @@ def generate_launch_description():
                     'launch',
                     'gz_sim.launch.py'])
             ]),
-            launch_arguments={'gz_args': ['-r -s -v1 ', world]}.items(),
+            launch_arguments={'gz_args': [f'-r -s -v1 --initial-sim-time {current_unix_time} ', world] }.items(),
         ),
             
         # Start Gazebosim client
