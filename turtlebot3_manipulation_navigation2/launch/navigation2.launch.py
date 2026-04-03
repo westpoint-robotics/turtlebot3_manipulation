@@ -56,7 +56,7 @@ def generate_launch_description():
             [
                 FindPackageShare('turtlebot3_manipulation_navigation2'),
                 'param',
-                'wp_nav2_params.yaml'
+                'turtlebot3.yaml'
             ]
         ),
     )

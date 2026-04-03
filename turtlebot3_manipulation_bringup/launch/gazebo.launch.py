@@ -174,7 +174,8 @@ def generate_launch_description():
                     'launch',
                     'gz_sim.launch.py'])
             ]),
-            launch_arguments={'gz_args': [f'-r -s -v1 --initial-sim-time {current_unix_time} ', world] }.items(),
+            launch_arguments={'gz_args': [f'-r -s -v1 ', world] }.items(),
+            # launch_arguments={'gz_args': [f'-r -s -v1 --initial-sim-time {current_unix_time} ', world] }.items(),
         ),
             
         # Start Gazebosim client
