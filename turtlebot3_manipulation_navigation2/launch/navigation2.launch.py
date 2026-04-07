@@ -67,7 +67,7 @@ def generate_launch_description():
             [
                 FindPackageShare('turtlebot3_manipulation_navigation2'),
                 'param',
-                'wp_nav2_params_sim.yaml'
+                'turtlebot3_use_sim_time.yaml'
             ]
         ),
     )
@@ -103,7 +103,7 @@ def generate_launch_description():
 
         DeclareLaunchArgument(
             'use_sim',
-            default_value='false',
+            default_value='true',
             description='Start robot in Gazebo simulation'),
 
         DeclareLaunchArgument(
@@ -165,6 +165,7 @@ def generate_launch_description():
             package='rviz2',
             executable='rviz2',
             name='rviz2',
+            parameters=[{'use_sim_time': True}],
             arguments=['-d', rviz_config_file],
             output='log',
             condition=IfCondition(start_rviz)),

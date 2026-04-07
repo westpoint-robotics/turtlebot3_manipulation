@@ -46,7 +46,7 @@ def generate_launch_description():
         print('Can not launch fake robot in Raspberry Pi')
         return LaunchDescription([])
     
-    current_unix_time = time.mktime(time.localtime())
+    # current_unix_time = time.mktime(time.localtime())
 
 
     # Add the package resources to GZ environmental variables
@@ -165,7 +165,10 @@ def generate_launch_description():
 
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource([ThisLaunchFileDir(), '/joystick.launch.py']),
-            launch_arguments={'prefix': prefix,}.items(),
+            launch_arguments={
+                'prefix': prefix,
+                'use_sim': use_sim_time,
+            }.items(),
         ),
 
         # Start Gazebosim server
@@ -174,7 +177,10 @@ def generate_launch_description():
                     'launch',
                     'gz_sim.launch.py'])
             ]),
-            launch_arguments={'gz_args': [f'-r -s -v1 ', world] }.items(),
+            launch_arguments={
+                'gz_args': [f'-r -s -v1 ', world], 
+                'use_sim': use_sim_time,
+            }.items(),
             # launch_arguments={'gz_args': [f'-r -s -v1 --initial-sim-time {current_unix_time} ', world] }.items(),
         ),
             
@@ -185,7 +191,10 @@ def generate_launch_description():
                             'launch',
                             'gz_sim.launch.py')
             ),
-            launch_arguments={'gz_args': ['-g ']}.items(),
+            launch_arguments={
+                'gz_args': ['-g '],
+                'use_sim': use_sim_time,
+            }.items(),
         ),
 
         # Map Gazebo topics into ROS2
