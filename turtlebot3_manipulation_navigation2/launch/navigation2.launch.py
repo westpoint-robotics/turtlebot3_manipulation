@@ -56,7 +56,7 @@ def generate_launch_description():
             [
                 FindPackageShare('turtlebot3_manipulation_navigation2'),
                 'param',
-                'turtlebot3.yaml'
+                'waffle_pi_robotis.yaml'
             ]
         ),
     )
