@@ -494,6 +494,7 @@ slam_toolbox:
     debug_logging: true
     max_laser_range: 3.5
     use_sim_time: False
+    loop_search_maximum_distance: 5.0
 
 sync_slam_toolbox_node:
   ros__parameters:

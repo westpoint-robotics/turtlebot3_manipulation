@@ -8,11 +8,10 @@ Panels:
         - /TF1/Frames1
         - /TF1/Tree1
         - /Map1
-        - /Map1/Status1
         - /Map1/Topic1
         - /Controller1
       Splitter Ratio: 0.5833333134651184
-    Tree Height: 264
+    Tree Height: 295
   - Class: rviz_common/Selection
     Name: Selection
   - Class: rviz_common/Tool Properties
@@ -103,6 +102,10 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
+        dummy_mimic_fix:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
         end_effector_link:
           Alpha: 1
           Show Axes: false
@@ -157,6 +160,9 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
+      Mass Properties:
+        Inertia: false
+        Mass: false
       Name: RobotModel
       TF Prefix: ""
       Update Interval: 0
@@ -164,6 +170,8 @@ Visualization Manager:
       Visual Enabled: true
     - Class: rviz_default_plugins/TF
       Enabled: true
+      Filter (blacklist): ""
+      Filter (whitelist): ""
       Frame Timeout: 15
       Frames:
         All Enabled: false
@@ -183,6 +191,8 @@ Visualization Manager:
           Value: false
         caster_back_right_link:
           Value: false
+        dummy_mimic_fix:
+          Value: true
         end_effector_link:
           Value: false
         gripper_left_link:
@@ -201,8 +211,6 @@ Visualization Manager:
           Value: false
         link5:
           Value: false
-        map:
-          Value: true
         odom:
           Value: true
         wheel_left_link:
@@ -215,37 +223,38 @@ Visualization Manager:
       Show Axes: true
       Show Names: false
       Tree:
-        map:
-          odom:
-            base_footprint:
-              base_link:
-                base_scan:
-                  {}
-                camera_link:
-                  camera_rgb_frame:
-                    camera_rgb_optical_frame:
-                      {}
-                caster_back_left_link:
-                  {}
-                caster_back_right_link:
-                  {}
-                imu_link:
-                  {}
-                link1:
-                  link2:
-                    link3:
-                      link4:
-                        link5:
-                          end_effector_link:
-                            {}
-                          gripper_left_link:
-                            {}
-                          gripper_right_link:
-                            {}
-                wheel_left_link:
-                  {}
-                wheel_right_link:
-                  {}
+        odom:
+          base_footprint:
+            base_link:
+              base_scan:
+                {}
+              camera_link:
+                camera_rgb_frame:
+                  camera_rgb_optical_frame:
+                    {}
+              caster_back_left_link:
+                {}
+              caster_back_right_link:
+                {}
+              imu_link:
+                {}
+              link1:
+                link2:
+                  link3:
+                    link4:
+                      link5:
+                        dummy_mimic_fix:
+                          {}
+                        end_effector_link:
+                          {}
+                        gripper_left_link:
+                          {}
+                        gripper_right_link:
+                          {}
+              wheel_left_link:
+                {}
+              wheel_right_link:
+                {}
       Update Interval: 0
       Value: true
     - Alpha: 1
@@ -316,6 +325,8 @@ Visualization Manager:
       Use rainbow: true
       Value: true
     - Alpha: 1
+      Binary representation: false
+      Binary threshold: 100
       Class: rviz_default_plugins/Map
       Color Scheme: map
       Draw Behind: true
@@ -324,6 +335,7 @@ Visualization Manager:
       Topic:
         Depth: 1
         Durability Policy: Transient Local
+        Filter size: 10
         History Policy: Keep Last
         Reliability Policy: Reliable
         Value: /map
@@ -346,6 +358,7 @@ Visualization Manager:
       Topic:
         Depth: 5
         Durability Policy: Volatile
+        Filter size: 10
         History Policy: Keep Last
         Reliability Policy: Best Effort
         Value: /particle_cloud
@@ -646,7 +659,7 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Scale: 127.88431549072266
+      Scale: 369.40350341796875
       Target Frame: base_link
       Value: TopDownOrtho (rviz_default_plugins)
       X: 0.008997947908937931
@@ -668,5 +681,5 @@ Window Geometry:
   Views:
     collapsed: true
   Width: 1160
-  X: 760
-  Y: 32
+  X: 1629
+  Y: 124
