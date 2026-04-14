@@ -52,7 +52,7 @@
   direction: ROS_TO_GZ
 
 # replace camera_info_bridge
-- ros_topic_name: "camera_info"
+- ros_topic_name: "/camera_info"
   gz_topic_name: "/camera_info"
   ros_type_name: "sensor_msgs/msg/CameraInfo"
   gz_type_name: "gz.msgs.CameraInfo"
