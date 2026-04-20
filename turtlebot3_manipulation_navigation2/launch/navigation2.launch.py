@@ -15,6 +15,7 @@
 # limitations under the License.
 #
 # Author: Darby Lim
+# https://www.youtube.com/watch?v=rZOxPGCn4QM&t=1076s
 
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
@@ -45,7 +46,8 @@ def generate_launch_description():
             [
                 FindPackageShare('turtlebot3_manipulation_navigation2'),
                 'map',
-                'small_building.yaml'
+                #'small_building.yaml'
+                'p1_map04.yaml'
             ]
         )
     )

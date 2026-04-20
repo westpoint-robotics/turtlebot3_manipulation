@@ -15,7 +15,7 @@ amcl:
     lambda_short: 0.1
     laser_likelihood_max_dist: 2.0
     laser_max_range: 100.0
-    laser_min_range: -1.0
+    laser_min_range: 0.15 #-1.0
     laser_model_type: "likelihood_field"
     max_beams: 60
     max_particles: 2000
@@ -495,6 +495,7 @@ slam_toolbox:
     max_laser_range: 3.5
     use_sim_time: False
     loop_search_maximum_distance: 5.0
+    min_laser_range: 0.15 # Ignore returns closer than 10cm
 
 sync_slam_toolbox_node:
   ros__parameters:
