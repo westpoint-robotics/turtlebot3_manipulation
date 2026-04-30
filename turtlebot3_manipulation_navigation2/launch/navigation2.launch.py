@@ -47,6 +47,7 @@ def generate_launch_description():
                 FindPackageShare('turtlebot3_manipulation_navigation2'),
                 'map',
                 'small_building.yaml'
+                #'sim_map01.yaml'
             ]
         )
     )
