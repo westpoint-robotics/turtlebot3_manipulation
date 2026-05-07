@@ -231,7 +231,7 @@ local_costmap:
       inflation_layer:
         plugin: "nav2_costmap_2d::InflationLayer"
         cost_scaling_factor: 3.0
-        inflation_radius: 0.25 # 0.55 # < 1/2 width of hallways
+        inflation_radius: 0.20 # 0.55 # < 1/2 width of hallways
       voxel_layer:
         plugin: "nav2_costmap_2d::VoxelLayer"
         enabled: True
@@ -266,7 +266,7 @@ global_costmap:
       global_frame: map
       robot_base_frame: base_footprint
       # robot_radius: 0.22
-      footprint: "[ [0.08, 0.14], [0.08, -0.14], [-0.20, -0.14], [-0.20, 0.14] ]" # Square 0.3m x 0.3m
+      footprint: "[ [0.08, 0.14], [0.08, -0.14], [-0.20, -0.14], [-0.20, 0.14] ]" 
       resolution: 0.05
       track_unknown_space: true
       plugins: ["static_layer", "obstacle_layer", "inflation_layer"]
